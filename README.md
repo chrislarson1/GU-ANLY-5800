@@ -88,6 +88,8 @@ Date | Lecture | Topics | Key Readings |
 | Dec 02 | **Lecture 14: Agents** | - Tools and function calling<br>- Model Context Protocol<br>- ReAct framework<br>- Experience replay and meta-learning<br>- Adversarial robustness<br>- Prompt injection attacks | [ReAct: Synergizing Reasoning and Acting (Yao et al., 2022)](https://arxiv.org/abs/2210.03629)<br>[Toolformer (Schick et al., 2023)](https://arxiv.org/abs/2302.04761)<br>[Model Context Protocol (MCP)](https://modelcontextprotocol.io/docs/learn/architecture)<br>[MAML: Model-Agnostic Meta-Learning (Finn et al., 2017)](https://arxiv.org/abs/1703.03400)<br>[Prompt Injection Attacks (Greshake et al., 2023)](https://arxiv.org/abs/2302.12173) |
 | Dec 09 | **Lecture 15: Training and Inference Computation** | - Quantization<br>- Model compression<br>- Advanced attention techniques<br>- KV-cache optimization<br>- Parallelism (data/tensor/pipeline)<br>- Inference-time scaling | [GPTQ: Accurate Post-Training Quantization (Frantar et al., 2022)](https://arxiv.org/abs/2210.17323)<br>[QLoRA: Efficient Finetuning (Dettmers et al., 2023)](https://arxiv.org/abs/2305.14314)<br>[FlashAttention 2 (Dao, 2023)](https://arxiv.org/abs/2307.08691)<br>[PagedAttention (Kwon et al., 2023)](https://arxiv.org/abs/2309.06180)<br>[Speculative Decoding (Chen et al., 2023)](https://arxiv.org/abs/2211.17192) |
 | Dec 16 | **Lecture 16: Final Project Presentations** |  | |
+
+*Note: Lecture slides/notes are typically published the day of the lecture.*
 ---
 
 ### Deliverables
