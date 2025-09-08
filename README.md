@@ -38,8 +38,10 @@ While this course has no prerequisites, it is designed for students with mathema
 
 ### Reference Texts
 
+Many of the topics covered in this course have not been fully exposited in textbooks, and so in this course we make direct reference to papers from the literature. With that said, below are three excellent reference texts that cover a good portion of the topics in lectures 1-7.
+
 1. [Jacob Eisenstein. Natural Language Processing](https://github.com/jacobeisenstein/gt-nlp-class/blob/master/notes/eisenstein-nlp-notes.pdf)
-2. [Dan Jurafsky, James H. Martin. Speech and Language Processing (3rd ed. draft)](https://web.stanford.edu/~jurafsky/slp3)
+2. [Dan Jurafsky, James H. Martin. Speech and Language Processing](https://web.stanford.edu/~jurafsky/slp3)
 3. [Ian Goodfellow, Yoshua Bengio, & Aaron Courville. Deep Learning](https://www.deeplearningbook.org)
 
 ---
