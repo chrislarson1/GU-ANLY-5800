@@ -97,14 +97,22 @@ Date | Lecture | Topics | Key Readings |
 
 | Assignment | Weight | Group Size | Due |
 |:------------:|:--------:|:------------:|:-----:|
-| [Assignment 1](https://github.com/chrislarson1/GU-ANLY-5800/blob/main/assignments/assignment-01.md) | 10% | individual | - | - |
+<!-- | [Assignment 1](<https://github.com/chrislarson1/GU-ANLY-5800/blob/main/assignments/assignment-01.md>) | 10% | individual | - | - |
 | [Assignment 2](https://github.com/chrislarson1/GU-ANLY-5800/blob/main/assignments/assignment-02.md) | 10% | individual | - | - |
 | [Assignment 3](https://github.com/chrislarson1/GU-ANLY-5800/blob/main/assignments/assignment-03.md) | 10% | individual | - | - |
 | [Assignment 4](https://github.com/chrislarson1/GU-ANLY-5800/blob/main/assignments/assignment-04.md) | 10% | individual | - | - |
 | [Exam 1](https://github.com/chrislarson1/GU-ANLY-5800/blob/main/exams/exam-01.md) | 15% | individual | - | - |
 | [Exam 2](https://github.com/chrislarson1/GU-ANLY-5800/blob/main/exams/exam-02.md) | 15% | individual | - | - |
 | [Exam 3](https://github.com/chrislarson1/GU-ANLY-5800/blob/main/exams/exam-03.md) | 15% | individual | - | - |
-| [Final Project](https://github.com/chrislarson1/GU-ANLY-5800/blob/main/project/description.md) | 15% | groups ≤ 4 | - | - |
+| [Final Project](https://github.com/chrislarson1/GU-ANLY-5800/blob/main/project/description.md) | 15% | groups ≤ 4 | - | - | -->
+| [Assignment 1]() | 10% | individual | - | - |
+| [Assignment 2]() | 10% | individual | - | - |
+| [Assignment 3]() | 10% | individual | - | - |
+| [Assignment 4]() | 10% | individual | - | - |
+| [Exam 1]() | 15% | individual | - | - |
+| [Exam 2]() | 15% | individual | - | - |
+| [Exam 3]() | 15% | individual | - | - |
+| [Final Project]() | 15% | groups ≤ 4 | - | - |
 
 ---
 
