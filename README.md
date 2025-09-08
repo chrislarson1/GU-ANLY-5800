@@ -90,6 +90,7 @@ Date | Lecture | Topics | Key Readings |
 | Dec 16 | **Lecture 16: Final Project Presentations** |  | |
 
 *Note: Lecture slides/notes are typically published the day of the lecture.*
+
 ---
 
 ### Deliverables
