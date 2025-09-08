@@ -107,7 +107,7 @@ Date | Lecture | Topics | Key Readings |
 ---
 
 ### Communication
-Course content will be published to this [GitHub repository](https://github.com/chrislarson1/GU-ANLY-5800), while all deliverables will be submitted through [Canvas](https://georgetown.instructure.com/courses/213744). We also have a dedicated Discord server, which is the preferred forum for all course communications. **Please join our [Discord](https://discord.gg/AkuhxBnE) server at your earliest convenience. In order for the teaching staff to associate your GU, GH, and Discord profiles, please enter your information into this [table](https://docs.google.com/spreadsheets/d/1MmJepoJmrjDOULWWtgQBb1BS7SvfRn70_MfWoeUH2Qg/edit?usp=sharing) to gain access to course materials and communications.**
+Course content will be published to this [GitHub repository](https://github.com/chrislarson1/GU-ANLY-5800), while all deliverables will be submitted through [Canvas](https://georgetown.instructure.com/courses/213744). We also have a dedicated Discord server, which is the preferred forum for all course communications. **Please join our [Discord](https://discord.gg/uztAhx8P) server at your earliest convenience. In order for the teaching staff to associate your GU, GH, and Discord profiles, please enter your information into this [table](https://docs.google.com/spreadsheets/d/1MmJepoJmrjDOULWWtgQBb1BS7SvfRn70_MfWoeUH2Qg/edit?usp=sharing) to gain access to course materials and communications.**
 
 ---
 
