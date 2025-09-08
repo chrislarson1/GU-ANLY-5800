@@ -123,7 +123,8 @@ Class attendance is required.
 - Assignments submitted after 48 hours: not accepted without prior approval
 
 #### Use of AI
-You are encouraged to use language models for the final project and assignments. Exams are open-note, but closed-book/internet.
+- You are encouraged to use language models as an aid in your assignments and final project. However, if a work submission contains LLM text verbatim, it will be rejected. You must submit your own work.
+- Exams are open-note, but closed-book/internet.
 
 #### Academic Integrity
 All submissions in this class must be your original work. Plagiarism or academic dishonesty will result in course failure and potential disciplinary action.
