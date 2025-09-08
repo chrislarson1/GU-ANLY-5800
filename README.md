@@ -46,6 +46,11 @@ Many of the topics covered in this course have not been fully exposited in textb
 
 ---
 
+### Communication
+Course content will be published to this [GitHub repository](https://github.com/chrislarson1/GU-ANLY-5800), while all deliverables will be submitted through [Canvas](https://georgetown.instructure.com/courses/213744). We also have a dedicated Discord server, which is the preferred forum for all course communications. **Please join our [Discord](https://discord.gg/uztAhx8P) server at your earliest convenience. In order for the teaching staff to associate your GU, GH, and Discord profiles, please enter your information into this [table](https://docs.google.com/spreadsheets/d/1MmJepoJmrjDOULWWtgQBb1BS7SvfRn70_MfWoeUH2Qg/edit?usp=sharing) to gain access to course materials and communications.**
+
+---
+
 ### JetStream2 Access
 As part of this course, you will have access to Jupyter notebooks with A100s (40GB) hosted on the [JetStream2 cluster](https://jetstream-cloud.org/documentation-support/index.html). This is a shared resource and will be made available ahead of the first assignment.
 
@@ -103,11 +108,6 @@ Date | Lecture | Topics | Key Readings |
 |  C    |       73          |
 |  C-   |       70          |
 |  F    |        0          |
-
----
-
-### Communication
-Course content will be published to this [GitHub repository](https://github.com/chrislarson1/GU-ANLY-5800), while all deliverables will be submitted through [Canvas](https://georgetown.instructure.com/courses/213744). We also have a dedicated Discord server, which is the preferred forum for all course communications. **Please join our [Discord](https://discord.gg/uztAhx8P) server at your earliest convenience. In order for the teaching staff to associate your GU, GH, and Discord profiles, please enter your information into this [table](https://docs.google.com/spreadsheets/d/1MmJepoJmrjDOULWWtgQBb1BS7SvfRn70_MfWoeUH2Qg/edit?usp=sharing) to gain access to course materials and communications.**
 
 ---
 
