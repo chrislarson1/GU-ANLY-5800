@@ -1,6 +1,6 @@
 # ANLY-5800: Natural Language Processing
 
-*Updated 09/07/25*
+*Updated 09/08/25*
 
 ### Course Information
 
@@ -135,19 +135,22 @@ All submissions in this class must be your original work. Plagiarism or academic
 
 ***I'm not sure if I should take this class. How should I decide?***
 
-If you are still deciding if anly-5800 is right for you, feedback from former students may be helpful. Over the past four years ~200 students have taken the course and I've received enough feedback to give you the TL;DR:
+If you are still deciding if anly-5800 is right for you, feedback from former students may be helpful. Over the past four years, ~200 students have taken the course and I've received enough feedback to give you the TL;DR:
 
 - The course has been characterized as **challenging**, primarily due to the breadth and depth of concepts and tools covered, many of which are new to students.
 
-- The course has been characterized as **rewarding**, with students feeling a sense of accomplishment after completing it. This feedback falls into a few buckets:
-  - Students noticed improved performance in technical job interviews (relevant to software and machine learning engineer roles, primarily).
-  - Students were able to find new direction and/or gain deeper insights into their graduate research (we've had graduate students from math, computer science, and public policy)
-  - Students reported the ability to craft better research statements in graduate school applications.
+- The course has been characterized as **rewarding**, with students feeling a sense of accomplishment after completing it. There have been a few common themes:
+  - Students attributed improved performance in technical job interviews to this class.
+  - Students mentioned new direction and insight into their own graduate research.
+  - Students reported an improved ability to craft compelling research statements in graduate school applications.
 
-- A minority of students have provided critical feedback that the course material and/or instruction is **too theoretical**. A related complaint is that the course is **too time consuming**. A much smaller number have **dropped out**.
+- A minority of students have provided critical feedback. There have been a few common themes:
+  - Students mentioned that course material and/or instruction was **overly theoretical**, and **not aimed at the practioner**.
+  - Many students have mentioned that the course was too **time consuming**.
+  - A small number of students have opted to **drop** the course.
 
 <br>
 
 ***I am a law student. Can I enroll in ANLY-5800?***
 
-If you are interested in LLMs and AI, you are more than welcome to attend lectures. However, to enroll in anly-5800, you will need at least some background in the areas mentioned in the [prerequisites section](#prerequisites). Please contact me directly if you feel you meet these requirements.
+If you are interested in LLMs and AI, you are more than welcome to attend lectures. However, to enroll in anly-5800, you will need at least some background in the areas mentioned in the [prerequisites section](#prerequisites). Please contact me if you have a non traditional background but feel you might meet these requirements.
