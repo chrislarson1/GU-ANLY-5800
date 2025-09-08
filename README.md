@@ -42,7 +42,7 @@ If you are still deciding if anly-5800 is right for you, feedback from former st
   - Students noticed improved performance in technical job interviews (relevant to software and machine learning engineer roles, primarily).
   - Students were able to find new direction and/or gain deeper insights into their graduate research (we've had graduate students from math, computer science, and public policy)
   - Students reported the ability to craft better research statements in graduate school applications.
-- A minority of students have provided critical feedback that the course material and/or instruction is **too formal** or **inaccessible**. A related complaint is that the course is **too time consuming**. A much smaller number, but again not insignificant, have **dropped out** of course.
+- A minority of students have provided critical feedback that the course material and/or instruction is **too formal** or **inaccessible**. A related complaint is that the course is **too time consuming**. A much smaller number have **dropped out** of course.
 
 ***I am a law student. Can I enroll in ANLY-5800?***
 
