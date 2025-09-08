@@ -23,28 +23,30 @@ Natural language processing (NLP) lies at the heart of modern information system
 
 ***What's new for Fall Semester 2025?***
 
-- Expanded LLM agent focus covering practical and formal aspects of LLM reasoning.
-- Modern architecture covering state-space models (Mamba, S4) and Mixture of Experts architectures that are challenging transformer dominance. Energy based models have also been added.
+- Expanded focus on LLM search and retrieval.
+- Expanded focus on the practical and formal aspects of LLM reasoning and AI *Agents*.
+- Expanded coverage of the latest NN architectures, including non-attention based models.
+- Removed Labs, and have rolled some of that content into Assignments.
 
 ---
 
 ### Prerequisites
 
-While this course has no prerequisites, it is designed for students with mathematical maturity that is typically gained through course work in linear algebra, probability theory, first order optimization methods, and basic programming. An archetypal profile would be a graduate or advanced undergraduate student in CS, math, engineering, or information sciences. But there have been many exceptions; above all other indicators, students displaying a genuine interest in the material tend to excel in the course. To assist with filling any gaps in the aforementioned technical areas, I devote the entire first lecture to mathematical concepts and tools that will be used throughout the class.
+While this course has no prerequisites, it is designed for students with mathematical maturity that is typically gained through course work in linear algebra, probability theory, first order optimization methods, and basic programming. The archetypal profile is a graduate or advanced undergraduate student in CS, math, engineering, or information sciences. But there have been many exceptions; above all other indicators, students displaying a genuine interest in the material tend to excel in the course. To assist with filling any gaps in the aforementioned technical areas, I devote the entire first lecture to mathematical concepts and tools that will be used throughout the class.
 
 ***What former students say about ANLY-5800***
 
-If you are still deciding if ANLY-5800 is right for you, feedback from former students may be of interest. Over the past four years ~200 students have taken the course and I've received enough feedback to give you the TL;DR:
-- The course is generally considered **challenging**, primarily due to the breadth and depth of concepts and tools covered, many of which are new to students.
-- The course has been characterized as **rewarding** with students feeling a sense of accomplishment after completing it. This feedback falls into a few buckets:
-  - Improved performance in technical job interviews (relevant to software and machine learning engineer roles, primarily)
-  - New direction and/or insights gained into one's own graduate research (we've had graduate students from math, computer science, and public policy)
-  - Graduate school admissions successes (I do write LORs for sufficiently adept students applying to graduate school).
+If you are still deciding if anly-5800 is right for you, feedback from former students may be helpful. Over the past four years ~200 students have taken the course and I've received enough feedback to give you the TL;DR:
+- The course has been characterized as **challenging**, primarily due to the breadth and depth of concepts and tools covered, many of which are new to students.
+- The course has been characterized as **rewarding**, with students feeling a sense of accomplishment after completing it. This feedback falls into a few buckets:
+  - Students noticed improved performance in technical job interviews (relevant to software and machine learning engineer roles, primarily).
+  - Students were able to find new direction and/or gain deeper insights into their graduate research (we've had graduate students from math, computer science, and public policy)
+  - Students reported the ability to craft better research statements in graduate school applications.
 - A minority of students, though not insignificant in number, have provided critical feedback that the course material and/or instruction is **too formal** or **inaccessible**. A related complaint is that the course is **too time consuming**. A much smaller number, but again not insignificant, have **dropped out** of course.
 
 ***I am a law student. Can I enroll in ANLY-5800?***
 
-If you are topically interested in LLMs and AI, that's awesome and you are more than welcome to attend lectures that may be of interest to you. However, to enroll in anly-5800, you will need a sufficient technical background as described above.
+If you are interested in LLMs and AI, you are more than welcome to attend lectures. However, to enroll in anly-5800, you will need a sufficient technical background as described above. Please contact me directly if you feel you meet these requirements.
 
 ---
 
