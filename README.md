@@ -34,20 +34,6 @@ Natural language processing (NLP) lies at the heart of modern information system
 
 While this course has no prerequisites, it is designed for students with mathematical maturity that is typically gained through course work in linear algebra, probability theory, first order optimization methods, and basic programming. The archetypal profile is a graduate or advanced undergraduate student in CS, math, engineering, or information sciences. But there have been many exceptions; above all other indicators, students displaying a genuine interest in the material tend to excel in the course. To assist with filling any gaps in the aforementioned technical areas, I devote the entire first lecture to mathematical concepts and tools that will be used throughout the class.
 
-***What former students say about ANLY-5800***
-
-If you are still deciding if anly-5800 is right for you, feedback from former students may be helpful. Over the past four years ~200 students have taken the course and I've received enough feedback to give you the TL;DR:
-- The course has been characterized as **challenging**, primarily due to the breadth and depth of concepts and tools covered, many of which are new to students.
-- The course has been characterized as **rewarding**, with students feeling a sense of accomplishment after completing it. This feedback falls into a few buckets:
-  - Students noticed improved performance in technical job interviews (relevant to software and machine learning engineer roles, primarily).
-  - Students were able to find new direction and/or gain deeper insights into their graduate research (we've had graduate students from math, computer science, and public policy)
-  - Students reported the ability to craft better research statements in graduate school applications.
-- A minority of students have provided critical feedback that the course material and/or instruction is **too formal** or **inaccessible**. A related complaint is that the course is **too time consuming**. A much smaller number have **dropped out**.
-
-***I am a law student. Can I enroll in ANLY-5800?***
-
-If you are interested in LLMs and AI, you are more than welcome to attend lectures. However, to enroll in anly-5800, you will need a sufficient technical background as described above. Please contact me directly if you feel you meet these requirements.
-
 ---
 
 ### Reference Texts
@@ -55,11 +41,6 @@ If you are interested in LLMs and AI, you are more than welcome to attend lectur
 1. [Jacob Eisenstein. Natural Language Processing](https://github.com/jacobeisenstein/gt-nlp-class/blob/master/notes/eisenstein-nlp-notes.pdf)
 2. [Dan Jurafsky, James H. Martin. Speech and Language Processing (3rd ed. draft)](https://web.stanford.edu/~jurafsky/slp3)
 3. [Ian Goodfellow, Yoshua Bengio, & Aaron Courville. Deep Learning](https://www.deeplearningbook.org)
-
----
-
-### Communication
-Course content will be published to this [GitHub repository](https://github.com/chrislarson1/GU-ANLY-5800), while all deliverables will be submitted through [Canvas](https://georgetown.instructure.com/courses/213744). We also have a dedicated Discord server, which is the preferred forum for all course communications. **Please join our [Discord](https://discord.gg/AkuhxBnE) server at your earliest convenience. In order for the teaching staff to associate your GU, GH, and Discord profiles, please enter your information into this [table](https://docs.google.com/spreadsheets/d/1MmJepoJmrjDOULWWtgQBb1BS7SvfRn70_MfWoeUH2Qg/edit?usp=sharing) to gain access to course materials and communications.**
 
 ---
 
@@ -97,22 +78,14 @@ Date | Lecture | Topics | Key Readings |
 
 | Assignment | Weight | Group Size | Due |
 |:------------:|:--------:|:------------:|:-----:|
-<!-- | [Assignment 1](<https://github.com/chrislarson1/GU-ANLY-5800/blob/main/assignments/assignment-01.md>) | 10% | individual | - | - |
-| [Assignment 2](https://github.com/chrislarson1/GU-ANLY-5800/blob/main/assignments/assignment-02.md) | 10% | individual | - | - |
-| [Assignment 3](https://github.com/chrislarson1/GU-ANLY-5800/blob/main/assignments/assignment-03.md) | 10% | individual | - | - |
-| [Assignment 4](https://github.com/chrislarson1/GU-ANLY-5800/blob/main/assignments/assignment-04.md) | 10% | individual | - | - |
-| [Exam 1](https://github.com/chrislarson1/GU-ANLY-5800/blob/main/exams/exam-01.md) | 15% | individual | - | - |
-| [Exam 2](https://github.com/chrislarson1/GU-ANLY-5800/blob/main/exams/exam-02.md) | 15% | individual | - | - |
-| [Exam 3](https://github.com/chrislarson1/GU-ANLY-5800/blob/main/exams/exam-03.md) | 15% | individual | - | - |
-| [Final Project](https://github.com/chrislarson1/GU-ANLY-5800/blob/main/project/description.md) | 15% | groups ≤ 4 | - | - | -->
-| [Assignment 1]() | 10% | individual | - | - |
-| [Assignment 2]() | 10% | individual | - | - |
-| [Assignment 3]() | 10% | individual | - | - |
-| [Assignment 4]() | 10% | individual | - | - |
-| [Exam 1]() | 15% | individual | - | - |
-| [Exam 2]() | 15% | individual | - | - |
-| [Exam 3]() | 15% | individual | - | - |
-| [Final Project]() | 15% | groups ≤ 4 | - | - |
+| [Assignment 1]() | 10% | individual | - |
+| [Assignment 2]() | 10% | individual | - |
+| [Assignment 3]() | 10% | individual | - |
+| [Assignment 4]() | 5% | individual | - |
+| [Exam 1]() | 15% | individual | - |
+| [Exam 2]() | 15% | individual | - |
+| [Exam 3]() | 15% | individual | - |
+| [Final Project]() | 20% | groups ≤ 4 | - |
 
 ---
 
@@ -128,6 +101,11 @@ Date | Lecture | Topics | Key Readings |
 |  C    |       73          |
 |  C-   |       70          |
 |  F    |        0          |
+
+---
+
+### Communication
+Course content will be published to this [GitHub repository](https://github.com/chrislarson1/GU-ANLY-5800), while all deliverables will be submitted through [Canvas](https://georgetown.instructure.com/courses/213744). We also have a dedicated Discord server, which is the preferred forum for all course communications. **Please join our [Discord](https://discord.gg/AkuhxBnE) server at your earliest convenience. In order for the teaching staff to associate your GU, GH, and Discord profiles, please enter your information into this [table](https://docs.google.com/spreadsheets/d/1MmJepoJmrjDOULWWtgQBb1BS7SvfRn70_MfWoeUH2Qg/edit?usp=sharing) to gain access to course materials and communications.**
 
 ---
 
@@ -147,3 +125,26 @@ You are encouraged to use language models for the final project and assignments.
 
 #### Academic Integrity
 All submissions in this class must be your original work. Plagiarism or academic dishonesty will result in course failure and potential disciplinary action.
+
+---
+
+### FAQs
+
+***I'm not sure if I should take this class. How should I decide?***
+
+If you are still deciding if anly-5800 is right for you, feedback from former students may be helpful. Over the past four years ~200 students have taken the course and I've received enough feedback to give you the TL;DR:
+
+- The course has been characterized as **challenging**, primarily due to the breadth and depth of concepts and tools covered, many of which are new to students.
+
+- The course has been characterized as **rewarding**, with students feeling a sense of accomplishment after completing it. This feedback falls into a few buckets:
+  - Students noticed improved performance in technical job interviews (relevant to software and machine learning engineer roles, primarily).
+  - Students were able to find new direction and/or gain deeper insights into their graduate research (we've had graduate students from math, computer science, and public policy)
+  - Students reported the ability to craft better research statements in graduate school applications.
+
+- A minority of students have provided critical feedback that the course material and/or instruction is **too theoretical**. A related complaint is that the course is **too time consuming**. A much smaller number have **dropped out**.
+
+<br>
+
+***I am a law student. Can I enroll in ANLY-5800?***
+
+If you are interested in LLMs and AI, you are more than welcome to attend lectures. However, to enroll in anly-5800, you will need at least some background in the areas described in the [prerequisites section](#prerequisites). Please contact me directly if you feel you meet these requirements.
