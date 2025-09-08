@@ -47,7 +47,7 @@ Many of the topics covered in this course have not been fully exposited in textb
 ---
 
 ### JetStream2 Access
-As part of this course, you will have access to Nvidia hosted Jupyter notebooks with A100s (40GB) through the [JetStream2 cluster](https://jetstream-cloud.org/documentation-support/index.html). This is a shared resource and will be made available ahead of the first assignment.
+As part of this course, you will have access to Jupyter notebooks with A100s (40GB) hosted on the [JetStream2 cluster](https://jetstream-cloud.org/documentation-support/index.html). This is a shared resource and will be made available ahead of the first assignment.
 
 ---
 
