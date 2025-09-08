@@ -32,7 +32,7 @@ Natural language processing (NLP) lies at the heart of modern information system
 
 ### Prerequisites
 
-While this course has no prerequisites, it is designed for students with mathematical maturity that is typically gained through course work in linear algebra, probability theory, first order optimization methods, and basic programming. The archetypal profile is a graduate or advanced undergraduate student in CS, math, engineering, or information sciences. But there have been many exceptions; above all other indicators, students displaying a genuine interest in the material tend to excel in the course. To assist with filling any gaps in the aforementioned technical areas, I devote the entire first lecture to mathematical concepts and tools that will be used throughout the class.
+While this course has no course prerequisites, it is designed for students with mathematical maturity that is typically gained through course work in linear algebra, probability theory, first order optimization methods, and basic programming. The archetypal profile is a graduate or advanced undergraduate student in CS, math, engineering, or information sciences. But there have been many exceptions; above all other indicators, students displaying a genuine interest in the material tend to excel in the course. To assist with filling any gaps in the aforementioned technical areas, I devote the entire first lecture to mathematical concepts and tools that will be used throughout the class.
 
 ---
 
@@ -150,4 +150,4 @@ If you are still deciding if anly-5800 is right for you, feedback from former st
 
 ***I am a law student. Can I enroll in ANLY-5800?***
 
-If you are interested in LLMs and AI, you are more than welcome to attend lectures. However, to enroll in anly-5800, you will need at least some background in the areas described in the [prerequisites section](#prerequisites). Please contact me directly if you feel you meet these requirements.
+If you are interested in LLMs and AI, you are more than welcome to attend lectures. However, to enroll in anly-5800, you will need at least some background in the areas mentioned in the [prerequisites section](#prerequisites). Please contact me directly if you feel you meet these requirements.
