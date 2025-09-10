@@ -84,13 +84,13 @@ The columns of $\mathbf{U}$ are called left singular vectors, the columns of $\m
 
 The singular values are $\sigma_i = \sqrt{\lambda_i}$ where $\lambda_i$ are the eigenvalues of $\mathbf{X}^T\mathbf{X}$.
 
-**Rank and Approximation:** The rank of $\mathbf{X}$ equals the number of non-zero singular values. For rank-$k$ approximation:
+**Rank and Approximation:** The rank of $\mathbf{X}$ equals the number of non-zero singular values. For rank $k$ approximation:
 
 $$\mathbf{X}_k = \sum_{i=1}^k \sigma_i \mathbf{u}_i \mathbf{v}_i^T$$
 
 **Theorem 4.2 Eckart-Young-Mirsky**
 
-Among all rank-$k$ matrices, $\mathbf{X}_k$ minimizes both $\Vert\mathbf{X} - \mathbf{B}\Vert_F$ and $\Vert\mathbf{X} - \mathbf{B}\Vert_2$ for any matrix $\mathbf{B}$ of rank at most $k$.
+Among all rank $k$ matrices, $\mathbf{X}_k$ minimizes both $\Vert\mathbf{X} - \mathbf{B}\Vert_F$ and $\Vert\mathbf{X} - \mathbf{B}\Vert_2$ for any matrix $\mathbf{B}$ of rank at most $k$.
 
 #### Eigendecomposition and Spectral Theory
 
