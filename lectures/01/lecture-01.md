@@ -187,6 +187,7 @@ $$f(\mathbf{x}) = \frac{1}{(2\pi)^{N/2}|\boldsymbol{\Sigma}|^{1/2}} \exp\left(-\
 **Theorem 2.1 Product Rule**
 
 For random variables $X$ and $Y$:
+
 $$P(X,Y) = P(Y|X)P(X) = P(X|Y)P(Y)$$
 
 **Corollary 2.1 Bayes' Theorem**
@@ -213,22 +214,28 @@ Consider an event $x$ with probability $P(x)$. Intuitively, we expect that:
 These intuitions lead us to define self-information as:
 
 **Definition 3.1** The self-information of event $x$ is:
+
 $$I(x) = -\log P(x)$$
 
 Let us examine the boundary behavior of this function:
 
 **Case 1:** $P(x) = 1$ (certain event)
+
 $$I(x) = -\log(1) = 0$$
 A certain event provides zero information—we learn nothing new.
 
 **Case 2:** $P(x) \to 0$ (impossible event)
+
 $$I(x) = -\log(P(x)) \to +\infty$$
+
 An impossible event, if observed, would provide infinite information.
 
 **Case 3:** $P(x) = 0.5$ (maximum uncertainty for binary event)
+
 $$I(x) = -\log(0.5) = \log(2) \approx 1.44 \text{ nats}$$
 
 The logarithmic structure ensures that independent events combine additively:
+
 $$I(x,y) = -\log P(x,y) = -\log P(x) - \log P(y) = I(x) + I(y)$$
 
 when $x$ and $y$ are independent.
@@ -238,15 +245,18 @@ when $x$ and $y$ are independent.
 While self-information characterizes individual events, we often need to characterize entire probability distributions. This naturally leads to considering the expected information content.
 
 **Definition 3.2** The Shannon entropy of distribution $P$ is:
+
 $$H(P) = \mathbb{E}_{X \sim P}[I(X)] = -\sum_{x} P(x) \log P(x)$$
 
 Entropy measures the average uncertainty in a distribution. Let us examine limiting cases:
 
 **Case 1:** Deterministic distribution $P(x_0) = 1, P(x) = 0$ for $x \neq x_0$
+
 $$H(P) = -(1 \cdot \log 1 + 0 \cdot \log 0) = 0$$
 No uncertainty exists—we always know the outcome.
 
 **Case 2:** Uniform distribution over $n$ outcomes: $P(x_i) = \frac{1}{n}$ for all $i$
+
 $$H(P) = -\sum_{i=1}^n \frac{1}{n} \log \frac{1}{n} = \log n$$
 Maximum uncertainty—all outcomes equally likely.
 
@@ -259,9 +269,11 @@ The uniform distribution maximizes entropy among all distributions with the same
 Often we need to compare two probability distributions. The KL divergence quantifies how much one distribution differs from another.
 
 **Definition 3.3** The Kullback-Leibler divergence from distribution $Q$ to distribution $P$ is:
+
 $$D_{KL}(P \parallel Q) = \mathbb{E}_{X \sim P}\left[\log \frac{P(X)}{Q(X)}\right] = \sum_{x} P(x) \log \frac{P(x)}{Q(x)}$$
 
 We can rewrite this as:
+
 $$D_{KL}(P \parallel Q) = \sum_{x} P(x) \log P(x) - \sum_{x} P(x) \log Q(x) = -H(P) + H(P,Q)$$
 
 where $H(P,Q) = -\sum_{x} P(x) \log Q(x)$ is the cross-entropy.
@@ -271,6 +283,7 @@ where $H(P,Q) = -\sum_{x} P(x) \log Q(x)$ is the cross-entropy.
 **Non-negativity:** $D_{KL}(P \parallel Q) \geq 0$ with equality if and only if $P = Q$ almost everywhere.
 
 **Proof sketch:** By Jensen's inequality applied to the concave logarithm function:
+
 $$D_{KL}(P \parallel Q) = -\sum_{x} P(x) \log \frac{Q(x)}{P(x)} \geq -\log \sum_{x} P(x) \frac{Q(x)}{P(x)} = -\log \sum_{x} Q(x) = 0$$
 
 **Asymmetry:** Generally $D_{KL}(P \parallel Q) \neq D_{KL}(Q \parallel P)$
@@ -278,10 +291,12 @@ $$D_{KL}(P \parallel Q) = -\sum_{x} P(x) \log \frac{Q(x)}{P(x)} \geq -\log \sum_
 Let us examine boundary behavior:
 
 **Case 1:** $P = Q$ (identical distributions)
+
 $$D_{KL}(P \parallel Q) = \sum_{x} P(x) \log 1 = 0$$
 No divergence between identical distributions.
 
 **Case 2:** $P(x_0) > 0$ but $Q(x_0) = 0$ for some $x_0$
+
 $$D_{KL}(P \parallel Q) = +\infty$$
 Infinite divergence when $P$ assigns probability to events that $Q$ considers impossible.
 
@@ -310,9 +325,11 @@ $$\hat{\boldsymbol{\theta}}_{MLE} = \arg\max_{\boldsymbol{\theta}} L(\boldsymbol
 The logarithmic transformation converts products to sums, simplifying computation and improving numerical stability.
 
 **Example 4.1** For Bernoulli trials with $n$ observations and $k$ successes, the MLE for parameter $\theta$ is:
+
 $$\hat{\theta}_{MLE} = \frac{k}{n}$$
 
 This follows from maximizing the log-likelihood:
+
 $$\ell(\theta) = k \log \theta + (n-k) \log(1-\theta)$$
 
 Setting $\frac{d\ell}{d\theta} = \frac{k}{\theta} - \frac{n-k}{1-\theta} = 0$ yields the result.
@@ -320,6 +337,7 @@ Setting $\frac{d\ell}{d\theta} = \frac{k}{\theta} - \frac{n-k}{1-\theta} = 0$ yi
 **Theorem 4.1 (Consistency of MLE)** Under regularity conditions, the MLE is consistent: $\hat{\boldsymbol{\theta}}_{MLE} \xrightarrow{P} \boldsymbol{\theta}_0$ as $n \to \infty$, where $\boldsymbol{\theta}_0$ is the true parameter value.
 
 **Theorem 4.2 (Asymptotic Normality of MLE)** Under regularity conditions:
+
 $$\sqrt{n}(\hat{\boldsymbol{\theta}}_{MLE} - \boldsymbol{\theta}_0) \xrightarrow{D} \mathcal{N}(\mathbf{0}, \mathcal{I}^{-1}(\boldsymbol{\theta}_0))$$
 
 where $\mathcal{I}(\boldsymbol{\theta})$ is the Fisher information matrix.
@@ -340,6 +358,7 @@ Solving for the maximum likelihood estimate of $n$ independent coin flips amount
 Consider $n$ independent coin flips, where each flip has probability $\theta$ of resulting in heads. Let $X_i$ denote the outcome of the $i$-th flip, where $X_i = 1$ indicates heads and $X_i = 0$ indicates tails. We observe $k = \sum_{i=1}^n X_i$ heads out of $n$ total flips.
 
 Each $X_i$ follows a Bernoulli distribution with parameter $\theta$:
+
 $$P(X_i = x_i) = \theta^{x_i}(1-\theta)^{1-x_i}, \quad x_i \in \{0,1\}$$
 
 We seek the maximum likelihood estimator $\hat{\theta}_{MLE}$.
@@ -351,9 +370,11 @@ Since the coin flips are independent, the joint probability mass function is the
 $$L(\theta) = P(X_1 = x_1, X_2 = x_2, \ldots, X_n = x_n; \theta) = \prod_{i=1}^n P(X_i = x_i; \theta)$$
 
 Substituting the Bernoulli PMF:
+
 $$L(\theta) = \prod_{i=1}^n \theta^{x_i}(1-\theta)^{1-x_i}$$
 
 Using properties of exponents:
+
 $$L(\theta) = \prod_{i=1}^n \theta^{x_i} \prod_{i=1}^n (1-\theta)^{1-x_i}$$
 
 $$L(\theta) = \theta^{\sum_{i=1}^n x_i} (1-\theta)^{\sum_{i=1}^n (1-x_i)}$$
@@ -365,9 +386,11 @@ $$L(\theta) = \theta^k (1-\theta)^{n-k}$$
 ### Log-Likelihood Function
 
 Taking the natural logarithm:
+
 $$\ell(\theta) = \log L(\theta) = \log[\theta^k (1-\theta)^{n-k}]$$
 
 Using logarithm properties:
+
 $$\ell(\theta) = k \log \theta + (n-k) \log(1-\theta)$$
 
 ### Find the Critical Point
@@ -381,22 +404,27 @@ $$\frac{d\ell(\theta)}{d\theta} = k \cdot \frac{1}{\theta} + (n-k) \cdot \frac{1
 $$\frac{d\ell(\theta)}{d\theta} = \frac{k}{\theta} - \frac{n-k}{1-\theta}$$
 
 Setting the first derivative equal to zero:
+
 $$\frac{k}{\theta} - \frac{n-k}{1-\theta} = 0$$
 
 ### Solve for θ
 
 Rearranging:
+
 $$\frac{k}{\theta} = \frac{n-k}{1-\theta}$$
 
 Cross-multiplying:
+
 $$k(1-\theta) = \theta(n-k)$$
 
 Expanding:
+
 $$k - k\theta = \theta n - k\theta$$
 
 $$k = \theta n$$
 
 Therefore:
+
 $$\hat{\theta}_{MLE} = \frac{k}{n}$$
 
 ### Verify Maximum
@@ -408,6 +436,7 @@ $$\frac{d^2\ell(\theta)}{d\theta^2} = \frac{d}{d\theta}\left[\frac{k}{\theta} - 
 $$\frac{d^2\ell(\theta)}{d\theta^2} = -\frac{k}{\theta^2} - \frac{n-k}{(1-\theta)^2}$$
 
 Since $k \geq 0$, $n-k \geq 0$, and $\theta \in (0,1)$, we have:
+
 $$\frac{d^2\ell(\theta)}{d\theta^2} < 0$$
 
 The second derivative is negative for all $\theta \in (0,1)$, confirming that $\hat{\theta}_{MLE} = \frac{k}{n}$ is indeed a maximum.
