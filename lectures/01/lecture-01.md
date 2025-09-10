@@ -24,7 +24,7 @@ This representation enables the application of linear algebraic operations acros
 
 $$\langle \mathbf{a}, \mathbf{b} \rangle = \mathbf{a}^T \mathbf{b} = \sum_{i=1}^{N} a_i b_i$$
 
-The inner product induces a geometric structure on our feature space. It provides both a notion of angle between vectors via $\cos \theta = \frac{\langle \mathbf{a}, \mathbf{b} \rangle}{||\mathbf{a}|| \cdot ||\mathbf{b}||}$ and serves as the fundamental operation in linear models.
+The inner product induces a geometric structure on our feature space. It provides both a notion of angle between vectors via $\cos \theta = \frac{\langle \mathbf{a}, \mathbf{b} \rangle}{\Vert\mathbf{a}\Vert \cdot \Vert\mathbf{b}\Vert}$ and serves as the fundamental operation in linear models.
 
 **Definition 1.3** The outer product $\mathbf{a} \otimes \mathbf{b} = \mathbf{a} \mathbf{b}^T$ yields a rank-1 matrix that captures the interaction structure between vector components.
 
@@ -32,13 +32,14 @@ The inner product induces a geometric structure on our feature space. It provide
 
 A norm on a vector space provides a notion of magnitude. For our purposes, we require the standard axioms:
 
-**Definition 1.4** A function $|| \cdot ||: \mathbb{R}^N \to \mathbb{R}_+$ is a norm if:
-1. $||\mathbf{x}|| = 0 \iff \mathbf{x} = \mathbf{0}$ (positive definiteness)
-2. $||\alpha \mathbf{x}|| = |\alpha| \cdot ||\mathbf{x}||$ for all $\alpha \in \mathbb{R}$ (homogeneity)
-3. $||\mathbf{x} + \mathbf{y}|| \leq ||\mathbf{x}|| + ||\mathbf{y}||$ (triangle inequality)
+**Definition 1.4** A function $\Vert \cdot \Vert: \mathbb{R}^N \to \mathbb{R}_+$ is a norm if:
+1. $\Vert\mathbf{x}\Vert = 0 \iff \mathbf{x} = \mathbf{0}$ (positive definiteness)
+2. $\Vert\alpha \mathbf{x}\Vert = |\alpha| \cdot \Vert\mathbf{x}\Vert$ for all $\alpha \in \mathbb{R}$ (homogeneity)
+3. $\Vert\mathbf{x} + \mathbf{y}\Vert \leq \Vert\mathbf{x}\Vert + \Vert\mathbf{y}\Vert$ (triangle inequality)
 
 The $L_p$ norms form a parametric family:
-$$||\mathbf{x}||_p = \left(\sum_{i=1}^N |x_i|^p\right)^{1/p}$$
+
+$$\Vert\mathbf{x}\Vert_p = \left(\sum_{i=1}^N |x_i|^p\right)^{1/p}$$
 
 Of particular importance are $L_1$ (Manhattan) and $L_2$ (Euclidean) norms, which induce different geometric properties and optimization behavior.
 
@@ -89,7 +90,7 @@ $$\mathbf{X}_k = \sum_{i=1}^k \sigma_i \mathbf{u}_i \mathbf{v}_i^T$$
 
 **Theorem 4.2 Eckart-Young-Mirsky**
 
-Among all rank-$k$ matrices, $\mathbf{X}_k$ minimizes both $||\mathbf{X} - \mathbf{B}||_F$ and $||\mathbf{X} - \mathbf{B}||_2$ for any matrix $\mathbf{B}$ of rank at most $k$.
+Among all rank-$k$ matrices, $\mathbf{X}_k$ minimizes both $\Vert\mathbf{X} - \mathbf{B}\Vert_F$ and $\Vert\mathbf{X} - \mathbf{B}\Vert_2$ for any matrix $\mathbf{B}$ of rank at most $k$.
 
 #### Eigendecomposition and Spectral Theory
 
@@ -124,7 +125,7 @@ $$\mathbf{C} = \frac{1}{M-1}\mathbf{X}^T\mathbf{X}$$
 The principal components are eigenvectors of the covariance matrix $\mathbf{C}$, ordered by decreasing eigenvalues.
 
 **Derivation:** We seek direction $\mathbf{w}$ that maximizes projected variance:
-$$\max_{\mathbf{w}} \text{Var}(\mathbf{X}\mathbf{w}) = \max_{\mathbf{w}} \mathbf{w}^T\mathbf{C}\mathbf{w} \quad \text{subject to } ||\mathbf{w}||_2 = 1$$
+$$\max_{\mathbf{w}} \text{Var}(\mathbf{X}\mathbf{w}) = \max_{\mathbf{w}} \mathbf{w}^T\mathbf{C}\mathbf{w} \quad \text{subject to } \Vert\mathbf{w}\Vert_2 = 1$$
 
 Using Lagrange multipliers:
 $$\mathcal{L}(\mathbf{w}, \lambda) = \mathbf{w}^T\mathbf{C}\mathbf{w} - \lambda(\mathbf{w}^T\mathbf{w} - 1)$$
