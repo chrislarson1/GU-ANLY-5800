@@ -174,6 +174,7 @@ Machine learning algorithms operate under uncertainty. Probability theory provid
 2. $\sum_{x \in \mathcal{X}} P(x) = 1$
 
 **Definition 2.2** The Bernoulli distribution with parameter $\theta \in [0,1]$ has PMF:
+
 $$P(Y = y) = \theta^y(1-\theta)^{1-y}, \quad y \in \{0,1\}$$
 
 For continuous random variables, we employ probability density functions satisfying analogous conditions with integration replacing summation.
@@ -317,9 +318,11 @@ Thus, cross-entropy as the natural loss function for probabilistic classificatio
 ## Maximum Likelihood Estimation
 
 **Definition 4.1** Given independent observations $\mathbf{x}_1, \ldots, \mathbf{x}_n$ from distribution $f(\cdot; \boldsymbol{\theta})$, the likelihood function is:
+
 $$L(\boldsymbol{\theta}) = \prod_{i=1}^n f(\mathbf{x}_i; \boldsymbol{\theta})$$
 
 **Definition 4.2** The maximum likelihood estimator (MLE) is:
+
 $$\hat{\boldsymbol{\theta}}_{MLE} = \arg\max_{\boldsymbol{\theta}} L(\boldsymbol{\theta}) = \arg\max_{\boldsymbol{\theta}} \sum_{i=1}^n \log f(\mathbf{x}_i; \boldsymbol{\theta})$$
 
 The logarithmic transformation converts products to sums, simplifying computation and improving numerical stability.
