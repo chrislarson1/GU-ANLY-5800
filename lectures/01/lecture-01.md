@@ -86,7 +86,7 @@ The singular values are $\sigma_i = \sqrt{\lambda_i}$ where $\lambda_i$ are the 
 
 **Rank and Approximation:** The rank of $\mathbf{X}$ equals the number of non-zero singular values. For rank $k$ approximation:
 
-$$\mathbf{X}_k = \sum_{i=0}^k \sigma_i \mathbf{u}_i \mathbf{v}_i^T$$
+$$\mathbf{X}_k = \sum_{i=0}^{k-1} \sigma_i \mathbf{u}_i \mathbf{v}_i^T$$
 
 **Theorem 4.2 Eckart-Young-Mirsky**
 
