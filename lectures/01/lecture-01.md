@@ -8,11 +8,13 @@ We begin with the fundamental mathematical structures underlying machine learnin
 
 **Definition 1.1** Let $\mathbf{X} \in \mathbb{R}^{M \times N}$ denote our data matrix:
 
-$$\mathbf{X} = \begin{bmatrix}
+$$
+\mathbf{X} = \begin{bmatrix}
 x_{1,1} & \dots & x_{1,N} \\
 \vdots & \ddots & \vdots \\
 x_{M,1} & \dots & x_{M,N}
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 where $x_{i,j}$ represents the $j$-th feature value of the $i$-th observation, with $M$ observations and $N$ features.
 
@@ -20,9 +22,9 @@ The convention aligns with the mathematical structure of linear transformations 
 
 ### Inner Products and Geometric Structure
 
-**Definition 1.2** For vectors $\mathbf{a}, \mathbf{b} \in \mathbb{R}^N$, the inner product is:
+**Definition 1.2** For vectors $\mathbf{a}, \mathbf{b} \in \mathbb{R}^{N}$, the inner product is:
 
-$$\langle \mathbf{a}, \mathbf{b} \rangle = \mathbf{a}^T \mathbf{b} = \sum_{i=0}^{N-1} a_i b_i$$
+$$\langle \mathbf{a}, \mathbf{b} \rangle = \mathbf{a}^T \mathbf{b} = \sum_{i=1}^{N} a_i b_i$$
 
 The inner product induces a geometric structure on our feature space. It provides both a notion of angle between vectors via $\cos \theta = \frac{\langle \mathbf{a}, \mathbf{b} \rangle}{\Vert\mathbf{a}\Vert \cdot \Vert\mathbf{b}\Vert}$ and serves as the fundamental operation in linear models.
 
@@ -32,32 +34,32 @@ The inner product induces a geometric structure on our feature space. It provide
 
 A norm on a vector space provides a notion of magnitude. For our purposes, we require the standard axioms:
 
-**Definition 1.4** A function $\Vert \cdot \Vert: \mathbb{R}^N \to \mathbb{R}_+$ is a norm if:
+**Definition 1.4** A function $\Vert \cdot \Vert: \mathbb{R}^{N} \to \mathbb{R}_+$ is a norm if:
 1. $\Vert\mathbf{x}\Vert = 0 \iff \mathbf{x} = \mathbf{0}$ (positive definiteness)
 2. $\Vert\alpha \mathbf{x}\Vert = |\alpha| \cdot \Vert\mathbf{x}\Vert$ for all $\alpha \in \mathbb{R}$ (homogeneity)
 3. $\Vert\mathbf{x} + \mathbf{y}\Vert \leq \Vert\mathbf{x}\Vert + \Vert\mathbf{y}\Vert$ (triangle inequality)
 
 The $L_p$ norms form a parametric family:
 
-$$\Vert\mathbf{x}\Vert_p = \left(\sum_{i=0}^N |x_i|^p\right)^{1/p}$$
+$$\Vert\mathbf{x}\Vert_p = \left(\sum_{i=1}^{N} |x_i|^p\right)^{1/p}$$
 
 Of particular importance are $L_1$ (Manhattan) and $L_2$ (Euclidean) norms, which induce different geometric properties and optimization behavior.
 
 ### Linear Transformations
 
-**Definition 1.5** A mapping $T: \mathbb{R}^N \to \mathbb{R}^M$ is linear if for all $\mathbf{x}, \mathbf{y} \in \mathbb{R}^N$ and scalars $\alpha, \beta \in \mathbb{R}$,
+**Definition 1.5** A mapping $T: \mathbb{R}^{N} \to \mathbb{R}^M$ is linear if for all $\mathbf{x}, \mathbf{y} \in \mathbb{R}^{N}$ and scalars $\alpha, \beta \in \mathbb{R}$,
 
 $$T(\alpha \, \mathbf{x} + \beta \, \mathbf{y}) = \alpha \, T(\mathbf{x}) + \beta \, T(\mathbf{y}).$$
 
 In finite-dimensional spaces, every linear transformation admits a matrix representation: there exists $\mathbf{A} \in \mathbb{R}^{M \times N}$ such that $T(\mathbf{x}) = \mathbf{A}\,\mathbf{x}$.
 
-Given $\mathbf{A} = [a_{i,j}]_{i=0..M-1,\, j=0..N-1}$ and $\mathbf{x} = (x_1,\ldots,x_N)^T$, the action of $\mathbf{A}$ on $\mathbf{x}$ produces $\mathbf{y} = \mathbf{A}\mathbf{x} \in \mathbb{R}^M$ with components
+Given $\mathbf{A} = [a_{i,j}]_{i=1..M,\, j=1..N}$ and $\mathbf{x} = (x_1,\ldots,x_N)^T$, the action of $\mathbf{A}$ on $\mathbf{x}$ produces $\mathbf{y} = \mathbf{A}\mathbf{x} \in \mathbb{R}^M$ with components
 
-$$y_i = \sum_{j=0}^{N-1} a_{i,j} \, x_j, \quad i = 1,\ldots,M.$$
+$$y_i = \sum_{j=1}^{N} a_{i,j} \, x_j, \quad i = 1,\ldots,M.$$
 
 Equivalently, letting $\mathbf{a}^{(j)}$ denote the $j$-th column of $\mathbf{A}$,
 
-$$\mathbf{A}\mathbf{x} = \sum_{j=0}^{N-1} x_j \, \mathbf{a}^{(j)}.$$
+$$\mathbf{A}\mathbf{x} = \sum_{j=1}^{N} x_j \, \mathbf{a}^{(j)}.$$
 
 ### Matrix Decompositions
 
@@ -86,7 +88,7 @@ The singular values are $\sigma_i = \sqrt{\lambda_i}$ where $\lambda_i$ are the 
 
 **Rank and Approximation:** The rank of $\mathbf{X}$ equals the number of non-zero singular values. For rank $k$ approximation:
 
-$$\mathbf{X}_k = \sum_{i=0}^{k-1} \sigma_i \mathbf{u}_i \mathbf{v}_i^T$$
+$$\mathbf{X}_k = \sum_{i=1}^{k} \sigma_i \mathbf{u}_i \mathbf{v}_i^T$$
 
 **Theorem 4.2 Eckart-Young-Mirsky**
 
@@ -180,7 +182,7 @@ $$P(Y = y) = \theta^y(1-\theta)^{1-y}, \quad y \in \{0,1\}$$
 
 For continuous random variables, we employ probability density functions satisfying analogous conditions with integration replacing summation.
 
-**Definition 2.3** The multivariate Gaussian distribution with parameters $\boldsymbol{\mu} \in \mathbb{R}^N$ and $\boldsymbol{\Sigma} \in \mathbb{R}^{N \times N}$ (positive definite) has density:
+**Definition 2.3** The multivariate Gaussian distribution with parameters $\boldsymbol{\mu} \in \mathbb{R}^{N}$ and $\boldsymbol{\Sigma} \in \mathbb{R}^{N \times N}$ (positive definite) has density:
 
 $$f(\mathbf{x}) = \frac{1}{(2\pi)^{N/2}|\boldsymbol{\Sigma}|^{1/2}} \exp\left(-\frac{1}{2}(\mathbf{x} - \boldsymbol{\mu})^T \boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})\right)$$
 
@@ -257,9 +259,9 @@ Entropy measures the average uncertainty in a distribution. Let us examine limit
 $$H(P) = -(1 \cdot \log 1 + 0 \cdot \log 0) = 0$$
 No uncertainty exists—we always know the outcome.
 
-**Case 2:** Uniform distribution over $n$ outcomes: $P(x_i) = \frac{1}{N-1}$ for all $i$
+**Case 2:** Uniform distribution over $n$ outcomes: $P(x_i) = \frac{1}{n}$ for all $i$
 
-$$H(P) = -\sum_{i=0}^{n-1} \frac{1}{N-1} \log \frac{1}{N-1} = \log n$$
+$$H(P) = -\sum_{i=1}^{n} \frac{1}{n} \log \frac{1}{n} = \log n$$
 Maximum uncertainty—all outcomes equally likely.
 
 **Theorem 3.1** For a discrete distribution over $n$ outcomes, $H(P) \leq \log n$ with equality if and only if $P$ is uniform.
@@ -320,17 +322,17 @@ Thus, cross-entropy as the natural loss function for probabilistic classificatio
 
 **Definition 4.1** Given independent observations $\mathbf{x}_1, \ldots, \mathbf{x}_n$ from distribution $f(\cdot; \boldsymbol{\theta})$, the likelihood function is:
 
-$$L(\boldsymbol{\theta}) = \prod_{i=0}^{n-1} f(\mathbf{x}_i; \boldsymbol{\theta})$$
+$$L(\boldsymbol{\theta}) = \prod_{i=1}^{n} f(\mathbf{x}_i; \boldsymbol{\theta})$$
 
 **Definition 4.2** The maximum likelihood estimator (MLE) is:
 
-$$\hat{\boldsymbol{\theta}}_{MLE} = \arg\max_{\boldsymbol{\theta}} L(\boldsymbol{\theta}) = \arg\max_{\boldsymbol{\theta}} \sum_{i=0}^{n-1} \log f(\mathbf{x}_i; \boldsymbol{\theta})$$
+$$\hat{\boldsymbol{\theta}}_{MLE} = \arg\max_{\boldsymbol{\theta}} L(\boldsymbol{\theta}) = \arg\max_{\boldsymbol{\theta}} \sum_{i=1}^{n} \log f(\mathbf{x}_i; \boldsymbol{\theta})$$
 
 The logarithmic transformation converts products to sums, simplifying computation and improving numerical stability.
 
 **Example 4.1** For Bernoulli trials with $n$ observations and $k$ successes, the MLE for parameter $\theta$ is:
 
-$$\hat{\theta}_{MLE} = \frac{k}{N-1}$$
+$$\hat{\theta}_{MLE} = \frac{k}{n}$$
 
 This follows from maximizing the log-likelihood:
 
@@ -342,7 +344,7 @@ Setting $\frac{d\ell}{d\theta} = \frac{k}{\theta} - \frac{n-k}{1-\theta} = 0$ yi
 
 **Theorem 4.2 (Asymptotic Normality of MLE)** Under regularity conditions:
 
-$$\sqrt{N-1}(\hat{\boldsymbol{\theta}}_{MLE} - \boldsymbol{\theta}_0) \xrightarrow{D} \mathcal{N-1}(\mathbf{0}, \mathcal{I}^{-1}(\boldsymbol{\theta}_0))$$
+$$\sqrt{n}(\hat{\boldsymbol{\theta}}_{MLE} - \boldsymbol{\theta}_0) \xrightarrow{D} \mathcal{N}(\mathbf{0}, \mathcal{I}^{-1}(\boldsymbol{\theta}_0))$$
 
 where $\mathcal{I}(\boldsymbol{\theta})$ is the Fisher information matrix.
 
@@ -359,7 +361,7 @@ I've provided the theoretical foundation for parameter estimation in machine lea
 
 Solving for the maximum likelihood estimate of $n$ independent coin flips amounts to deriving a the MLE estimate for the Bernoulli parameter, $\theta$.
 
-Consider $n$ independent coin flips, where each flip has probability $\theta$ of resulting in heads. Let $X_i$ denote the outcome of the $i$-th flip, where $X_i = 1$ indicates heads and $X_i = 0$ indicates tails. We observe $k = \sum_{i=0}^{n-1} X_i$ heads out of $n$ total flips.
+Consider $n$ independent coin flips, where each flip has probability $\theta$ of resulting in heads. Let $X_i$ denote the outcome of the $i$-th flip, where $X_i = 1$ indicates heads and $X_i = 0$ indicates tails. We observe $k = \sum_{i=1}^{n} X_i$ heads out of $n$ total flips.
 
 Each $X_i$ follows a Bernoulli distribution with parameter $\theta$:
 
@@ -371,22 +373,27 @@ We seek the maximum likelihood estimator $\hat{\theta}_{MLE}$.
 
 Since the coin flips are independent, the joint probability mass function is the product of individual probabilities:
 
-$$L(\theta) = P(X_1 = x_1, X_2 = x_2, \ldots, X_n = x_n; \theta) = \prod_{i=0}^{n-1} P(X_i = x_i; \theta)$$
+$$L(\theta) = P(X_1 = x_1, X_2 = x_2, \ldots, X_n = x_n; \theta) = \prod_{i=1}^{n} P(X_i = x_i; \theta)$$
 
 Substituting the Bernoulli PMF:
 
-$$L(\theta) = \prod_{i=0}^{n-1} \theta^{x_i}(1-\theta)^{1-x_i}$$
+$$L(\theta) = \prod_{i=1}^{n} \theta^{x_i}(1-\theta)^{1-x_i}$$
 
 Using properties of exponents:
 
-$$L(\theta) = \prod_{i=0}^{n-1} \theta^{x_i} \prod_{i=0}^{n-1} (1-\theta)^{1-x_i}$$
+$$L(\theta) = \prod_{i=1}^{n} \theta^{x_i} \prod_{i=1}^{n} (1-\theta)^{1-x_i}$$
 
-$$L(\theta) = \theta^{\sum_{i=0}^{n-1} x_i}\,(1-\theta)^{\sum_{i=0}^{n-1} (1-x_i)}$$
+$$L(\theta) = \theta^{\sum_{i=1}^{n} x_i}\,(1-\theta)^{\sum_{i=1}^{n} (1-x_i)}$$
 
 Since
 
 $$
-\sum_{i=0}^{n-1} x_i = k$ and $\sum_{i=0}^{n-1} (1-x_i) = n - k$$:
+\sum_{i=1}^{n} x_i = k
+$$
+and
+$$
+\sum_{i=1}^{n} (1-x_i) = n - k
+$$:
 
 $$L(\theta) = \theta^k (1-\theta)^{n-k}$$
 
@@ -432,7 +439,7 @@ $$k = \theta n$$
 
 Therefore:
 
-$$\hat{\theta}_{MLE} = \frac{k}{N-1}$$
+$$\hat{\theta}_{MLE} = \frac{k}{n}$$
 
 ### Verify Maximum
 
@@ -446,7 +453,7 @@ Since $k \geq 0$, $n-k \geq 0$, and $\theta \in (0,1)$, we have:
 
 $$\frac{d^2\ell(\theta)}{d\theta^2} < 0$$
 
-The second derivative is negative for all $\theta \in (0,1)$, confirming that $\hat{\theta}_{MLE} = \frac{k}{N-1}$ is indeed a maximum.
+The second derivative is negative for all $\theta \in (0,1)$, confirming that $\hat{\theta}_{MLE} = \frac{k}{n}$ is indeed a maximum.
 
 ### Interpretation
 
@@ -457,6 +464,6 @@ The MLE for the Bernoulli parameter is simply the observed proportion of success
 Note that we must consider the constraints $\theta \in [0,1]$:
 - If $k = 0$, then $\hat{\theta}_{MLE} = 0$
 - If $k = n$, then $\hat{\theta}_{MLE} = 1$
-- If $0 < k < n$, then $\hat{\theta}_{MLE} = \frac{k}{N-1} \in (0,1)$
+- If $0 < k < n$, then $\hat{\theta}_{MLE} = \frac{k}{n} \in (0,1)$
 
-In all cases, the MLE is the sample proportion $\frac{k}{N-1}$.
+In all cases, the MLE is the sample proportion $\frac{k}{n}$.
