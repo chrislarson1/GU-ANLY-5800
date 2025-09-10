@@ -351,7 +351,11 @@ $$\ell(\theta) = k \log \theta + (n-k) \log(1-\theta)$$
 
 Setting $\frac{d\ell}{d\theta} = \frac{k}{\theta} - \frac{n-k}{1-\theta} = 0$ yields the result.
 
-**Theorem 4.1 (Consistency of MLE)** Under regularity conditions, the MLE is consistent: $\hat{\boldsymbol{\theta}}_{MLE} \xrightarrow{P} \boldsymbol{\theta}_0$ as $n \to \infty$, where $\boldsymbol{\theta}_0$ is the true parameter value.
+**Theorem 4.1 (Consistency of MLE)** Under regularity conditions, the MLE is consistent:
+
+$$\hat{\boldsymbol{\theta}}_{MLE} \xrightarrow{P} \boldsymbol{\theta}_0$$
+
+as $n \to \infty$, where $\boldsymbol{\theta}_0$ is the true parameter value.
 
 **Theorem 4.2 (Asymptotic Normality of MLE)** Under regularity conditions:
 
