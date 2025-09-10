@@ -120,6 +120,7 @@ where $\mathbf{Q}$ contains orthonormal eigenvectors and $\mathbf{\Lambda} = \te
 PCA emerges naturally from the eigendecomposition of covariance matrices, providing optimal low-dimensional representations under the $L_2$ norm.
 
 **Problem Setup:** Given centered data matrix $\mathbf{X} \in \mathbb{R}^{M \times N}$ (rows are observations), the sample covariance matrix is:
+
 $$\mathbf{C} = \frac{1}{M-1}\mathbf{X}^T\mathbf{X}$$
 
 **Theorem 4.4 PCA Eigendecomposition**
@@ -127,12 +128,15 @@ $$\mathbf{C} = \frac{1}{M-1}\mathbf{X}^T\mathbf{X}$$
 The principal components are eigenvectors of the covariance matrix $\mathbf{C}$, ordered by decreasing eigenvalues.
 
 **Derivation:** We seek direction $\mathbf{w}$ that maximizes projected variance:
+
 $$\max_{\mathbf{w}} \text{Var}(\mathbf{X}\mathbf{w}) = \max_{\mathbf{w}} \mathbf{w}^T\mathbf{C}\mathbf{w} \quad \text{subject to } \Vert\mathbf{w}\Vert_2 = 1$$
 
 Using Lagrange multipliers:
+
 $$\mathcal{L}(\mathbf{w}, \lambda) = \mathbf{w}^T\mathbf{C}\mathbf{w} - \lambda(\mathbf{w}^T\mathbf{w} - 1)$$
 
 Taking the derivative and setting to zero:
+
 $$\frac{\partial\mathcal{L}}{\partial\mathbf{w}} = 2\mathbf{C}\mathbf{w} - 2\lambda\mathbf{w} = 0$$
 
 This yields the eigenvalue equation: $\mathbf{C}\mathbf{w} = \lambda\mathbf{w}$
@@ -144,9 +148,12 @@ The maximum variance is achieved by the eigenvector corresponding to the largest
 **Theorem 4.5** For centered data matrix $\mathbf{X}$, PCA can be computed directly via SVD without forming the covariance matrix.
 
 **Proof:** Let $\mathbf{X} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^T$ be the SVD. Then:
+
 $$\mathbf{C} = \frac{1}{M-1}\mathbf{X}^T\mathbf{X} = \frac{1}{M-1}\mathbf{V}\mathbf{\Sigma}^T\mathbf{\Sigma}\mathbf{V}^T$$
 
-The columns of $\mathbf{V}$ are eigenvectors of $\mathbf{C}$ with eigenvalues $\lambda_i = \frac{\sigma_i^2}{M-1}$.
+The columns of $\mathbf{V}$ are eigenvectors of $\mathbf{C}$ with eigenvalues:
+
+$$\lambda_i = \frac{\sigma_i^2}{M-1}$$
 
 **Computational Advantages:**
 1. **Numerical stability:** Avoids forming $\mathbf{X}^T\mathbf{X}$, which is often ill-conditioned
@@ -192,11 +199,15 @@ $$f(\mathbf{x}) = \frac{1}{(2\pi)^{N/2}|\boldsymbol{\Sigma}|^{1/2}} \exp\left(-\
 
 For random variables $X$ and $Y$:
 
-$$P(X,Y) = P(Y|X)P(X) = P(X|Y)P(Y)$$
+$$
+P(X,Y) = P(Y|X)P(X) = P(X|Y)P(Y)
+$$
 
 **Corollary 2.1 Bayes' Theorem**
 
-$$P(Y|X) = \frac{P(X|Y)P(Y)}{P(X)}$$
+$$
+P(Y|X) = \frac{P(X|Y)P(Y)}{P(X)}
+$$
 
 This provides the mathematical foundation for Bayesian inference and posterior probability computation.
 
