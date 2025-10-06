@@ -215,6 +215,76 @@ This provides the mathematical foundation for Bayesian inference and posterior p
 
 ---
 
+## Maximum Likelihood Estimation
+
+Given a specific choice of model, MLE provides a principled way to select parameters by maximizing the joint probability of the observed data under the model: choose parameters that make the observed dataset most *likley* under our model.
+
+Let $\mathcal{D} = \{\mathbf{x}_1, \ldots, \mathbf{x}_n\}$ be the data and $p(\cdot\,;\,\boldsymbol{\theta})$ a parametric family. We maximize the joint probability of the data under the model:
+
+$$\hat{\boldsymbol{\theta}} = \arg\max_{\boldsymbol{\theta}} P(\mathcal{D}\mid\boldsymbol{\theta}).$$
+
+Under the common i.i.d. assumption, the joint factorizes as a product, yielding a tractable likelihood:
+
+$$P(\mathcal{D}\mid\boldsymbol{\theta}) = \prod_{i=1}^{n} p(\mathbf{x}_i; \boldsymbol{\theta}), \quad \ell(\boldsymbol{\theta}) = \sum_{i=1}^{n} \log p(\mathbf{x}_i; \boldsymbol{\theta}).$$
+
+Modeling assumptions make this optimization tractable:
+- samples in $D$ are i.i.d.
+- parametric choice of $p$ (e.g., Gaussian, softmax classifier)
+- conditional independence where appropriate (e.g., Naive Bayes, HMMs)
+
+In practice, we minimize negative log-likelihood (NLL), equivalently maximizing log-likelihood:
+
+$$\hat{\boldsymbol{\theta}} = \arg\min_{\boldsymbol{\theta}} \Big(-\frac{1}{n}\sum_{i=1}^{n} \log p(\mathbf{x}_i; \boldsymbol{\theta})\Big),$$
+
+which is empirical risk minimization with loss $\;\mathcal{L}(\mathbf{x};\boldsymbol{\theta}) = -\log p(\mathbf{x};\boldsymbol{\theta}).$
+
+
+**Definition 4.1** Given independent observations $\mathbf{x}_1, \ldots, \mathbf{x}_n$ from distribution $p(\cdot; \boldsymbol{\theta})$, the likelihood function is:
+
+$$L(\boldsymbol{\theta}) = \prod_{i=1}^{n} p(\mathbf{x}_i; \boldsymbol{\theta})$$
+
+**Definition 4.2** The maximum likelihood estimator (MLE) is:
+
+$$\hat{\boldsymbol{\theta}}_{MLE} = \arg\max_{\boldsymbol{\theta}} L(\boldsymbol{\theta}) = \arg\max_{\boldsymbol{\theta}} \sum_{i=1}^{n} \log p(\mathbf{x}_i; \boldsymbol{\theta})$$
+
+The logarithmic transformation converts products to sums; this simplifies analysis, and most importantly, solves the numerical stability problem inherent in multiplying a large number of probability values together.
+
+**Theorem 4.1 (Consistency of MLE)** Under regularity conditions, the MLE is consistent:
+
+$$\hat{\boldsymbol{\theta}}_{MLE} \xrightarrow{P} \boldsymbol{\theta}_0$$
+
+as $n \to \infty$, where $\boldsymbol{\theta}_0$ is the true parameter value.
+
+Intuition and implications
+- As $n$ grows, the (average) log-likelihood concentrates around its expectation. If the model is identifiable and regularity conditions hold, the maximizer must approach the true parameter.
+- Guarantees that more data improves estimation quality in a well-specified model.
+- Can fail with model misspecification, non-identifiability, boundary parameters, or violated regularity.
+
+**Theorem 4.2 (Asymptotic Normality of MLE)** Under regularity conditions:
+
+$$\sqrt{n}(\hat{\boldsymbol{\theta}}_{MLE} - \boldsymbol{\theta}_0) \xrightarrow{D} \mathcal{N}(\mathbf{0}, \mathcal{I}^{-1}(\boldsymbol{\theta}_0))$$
+
+where $\mathcal{I}(\boldsymbol{\theta})$ is the Fisher information matrix.
+
+Intuition and implications
+
+- By a CLT-flavor argument, the score (gradient of log-likelihood) is asymptotically normal with variance equal to Fisher information; smoothness yields a normal approximation for the estimator.
+- Enables approximate standard errors and confidence intervals: $\operatorname{SE}(\hat{\theta}_j) \approx \sqrt{[\mathcal{I}^{-1}(\hat{\boldsymbol{\theta}})/n]_{jj}}$.
+- Supports Wald tests and connects to the Cramér–Rao bound: the MLE is asymptotically efficient in well-specified, regular models.
+- Caveats: small samples, boundary solutions, heavy tails, or non-regular models can invalidate the approximation.
+
+**Example 4.1** For Bernoulli trials with $n$ observations and $k$ successes, the MLE for parameter $\theta$ is:
+
+$$\hat{\theta}_{MLE} = \frac{k}{n}$$
+
+This follows from maximizing the log-likelihood:
+
+$$\ell(\theta) = k \log \theta + (n-k) \log(1-\theta)$$
+
+Setting $\frac{d\ell}{d\theta} = \frac{k}{\theta} - \frac{n-k}{1-\theta} = 0$ yields the result.
+
+---
+
 ### Information Theory
 
 Information theory provides a mathematical framework for quantifying uncertainty and measuring the "surprise" contained in probabilistic events. We begin by defining information in terms of the properties any measure of it should obey. From there, we trace Shannon's line of reasoning that led him to the notion of information *entropy*.
@@ -326,49 +396,6 @@ In machine learning contexts:
 - Minimizing $H(P,Q)$ with respect to $Q$ is equivalent to minimizing $D_{KL}(P \parallel Q)$
 
 Thus, cross-entropy as the natural loss function for probabilistic classification tasks. When we minimize cross-entropy loss, we are effectively making our model's predictions as close as possible to the observed data distribution as measured by KL divergence.
-
----
-
-## Maximum Likelihood Estimation
-
-**Definition 4.1** Given independent observations $\mathbf{x}_1, \ldots, \mathbf{x}_n$ from distribution $f(\cdot; \boldsymbol{\theta})$, the likelihood function is:
-
-$$L(\boldsymbol{\theta}) = \prod_{i=1}^{n} f(\mathbf{x}_i; \boldsymbol{\theta})$$
-
-**Definition 4.2** The maximum likelihood estimator (MLE) is:
-
-$$\hat{\boldsymbol{\theta}}_{MLE} = \arg\max_{\boldsymbol{\theta}} L(\boldsymbol{\theta}) = \arg\max_{\boldsymbol{\theta}} \sum_{i=1}^{n} \log f(\mathbf{x}_i; \boldsymbol{\theta})$$
-
-The logarithmic transformation converts products to sums, simplifying computation and improving numerical stability.
-
-**Example 4.1** For Bernoulli trials with $n$ observations and $k$ successes, the MLE for parameter $\theta$ is:
-
-$$\hat{\theta}_{MLE} = \frac{k}{n}$$
-
-This follows from maximizing the log-likelihood:
-
-$$\ell(\theta) = k \log \theta + (n-k) \log(1-\theta)$$
-
-Setting $\frac{d\ell}{d\theta} = \frac{k}{\theta} - \frac{n-k}{1-\theta} = 0$ yields the result.
-
-**Theorem 4.1 (Consistency of MLE)** Under regularity conditions, the MLE is consistent:
-
-$$\hat{\boldsymbol{\theta}}_{MLE} \xrightarrow{P} \boldsymbol{\theta}_0$$
-
-as $n \to \infty$, where $\boldsymbol{\theta}_0$ is the true parameter value.
-
-**Theorem 4.2 (Asymptotic Normality of MLE)** Under regularity conditions:
-
-$$\sqrt{n}(\hat{\boldsymbol{\theta}}_{MLE} - \boldsymbol{\theta}_0) \xrightarrow{D} \mathcal{N}(\mathbf{0}, \mathcal{I}^{-1}(\boldsymbol{\theta}_0))$$
-
-where $\mathcal{I}(\boldsymbol{\theta})$ is the Fisher information matrix.
-
-**Importantly**
-
-I've provided the theoretical foundation for parameter estimation in machine learning models above. There are a few important things to understand:
-- Nearly all of machinery involved with *learning* is rooted in maximum likelihood estimation and derivative methods.
-- Nearly all of the work made in deep learning over the past 20 years has been not with the underlying estimation methods, but with clever parameterizations (i.e. network architecture) of the data distribution and more powerful optimization methods.
-
 
 # Appendix
 
