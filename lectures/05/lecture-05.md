@@ -1,276 +1,649 @@
-# Lecture 5: Word Embeddings and Word2Vec
+# Lecture 05: Neural Networks
 
-## Feature Representation for Sequential Data
+*Chris Larson | Georgetown University | ANLY-5800 | Fall '25*
 
-In natural language, words appear in sequences. Consider a text corpus where we observe words at various positions:
-
-$$\ldots, X_{t-3}, X_{t-2}, X_{t-1}, X_t, X_{t+1}, X_{t+2}, X_{t+3}, \ldots$$
-
-where $X_t$ represents the word at position $t$ in our corpus.
-
-### Vocabulary Representation
-
-**Definition 5.1** Let $\mathcal{V}$ be our vocabulary of size $N$. Each word $w \in \mathcal{V}$ is represented as a one-hot encoded vector:
-
-$$X_w = \mathbb{I}(w) = \begin{bmatrix} 0 \\ \vdots \\ 1 \\ \vdots \\ 0 \end{bmatrix} \in \{0,1\}^N$$
-
-where the $i$-th entry is 1 if $w$ is the $i$-th word in the vocabulary, and 0 otherwise.
-
-This representation, while sparse and high-dimensional, provides an unambiguous encoding of discrete tokens into a format amenable to mathematical manipulation.
-
-### Context Windows and the Skip-gram Dataset
-
-The fundamental insight of distributional semantics is that words appearing in similar contexts tend to have similar meanings. To operationalize this, we define a context window.
-
-**Definition 5.2** For a center word $X_t$ and context window size $k$, the context consists of the $2k$ surrounding words:
-$$\text{Context}(X_t) = \{X_{t-k}, \ldots, X_{t-1}, X_{t+1}, \ldots, X_{t+k}\}$$
-
-**Example:** For $k=2$ and center word $X_t$:
-$$\underbrace{X_{t-2}, X_{t-1}}_{\text{left context}}, \; X_t, \; \underbrace{X_{t+1}, X_{t+2}}_{\text{right context}}$$
-
-**Dataset Construction:** We construct training dataset $\mathcal{D}$ by pairing each center word with each word in its context:
-
-$$\mathcal{D} = \{(X_w^{(1)}, X_c^{(1)}), \ldots, (X_w^{(M)}, X_c^{(M)})\}$$
-
-where $X_w$ denotes a center word and $X_c$ denotes a context word. For each occurrence of a word in the corpus, we generate multiple training pairs—one for each word in its context window.
+### Introduction to Artificial Neural Networks
 
 ---
 
-## The Word2Vec Model Architecture
+## Lesson Plan
 
-Word2Vec employs two embedding matrices that map discrete vocabulary indices to continuous vector representations.
-
-### Embedding Matrices
-
-**Definition 5.3** The model maintains two matrices:
-
-1. **Center word embeddings:** $U \in \mathbb{R}^{K \times N}$, where column $U_w$ is the $K$-dimensional embedding for center word $w$
-
-2. **Context word embeddings:** $V \in \mathbb{R}^{K \times N}$, where column $V_c$ is the $K$-dimensional embedding for context word $c$
-
-Here $K \ll N$ is the embedding dimension (typically $K \in [50, 300]$ while $N$ may be 50,000 or larger).
-
-**Extraction Operation:** For word $w$ with one-hot encoding $X_w$:
-$$U_w = U \cdot X_w$$
-
-This extracts the $w$-th column of $U$, giving us the embedding vector for word $w$.
-
-### Model Predictions
-
-The Skip-gram model predicts context words given a center word. The score for context word $c$ given center word $w$ is computed via the inner product:
-
-$$\text{score}(w,c) = U_w^T V_c$$
-
-**Key Observations:**
-- $U_w^T V_c$ is large when center word $w$ and context word $c$ frequently co-occur
-- $U_w^T V_c$ is small (or negative) when they rarely co-occur
-- The inner product provides a natural measure of compatibility between embeddings
-
-To convert scores to probabilities, we apply the softmax function:
-
-**Definition 5.4** The probability of observing context word $c$ given center word $w$ is:
-
-$$P(X_c | X_w; U, V) = \frac{e^{U_w^T V_c}}{\sum_{j=1}^N e^{U_w^T V_j}} \in [0,1]^N$$
-
-This ensures proper normalization: $\sum_{c=1}^N P(X_c | X_w; U, V) = 1$.
+- Neural Networks fundamentals
+- Activation functions
+- Training neural networks
+- Regularization techniques
+- Backpropagation
+- Bias-variance tradeoff
+- Learning rate scheduling and annealing
 
 ---
 
-## The Word2Vec Training Algorithm
+## The Machine Learning Framework
 
-### Algorithm Overview
+At a high level, machine learning is a set of techniques, or *machinery*, designed to automatically learn complex relationships between random variables. Typically there is some output that we are interested in predicting, and there are inputs that we hypothesize affect that output. The goal is to accurately model real world phenomena.
 
-**Input:** Corpus yielding dataset $\mathcal{D} = \{(X_w^{(i)}, X_c^{(i)})\}_{i=1}^M$, embedding dimension $K$, learning rate $\eta$
-
-**Output:** Trained embedding matrices $U^*, V^*$
-
-**Step 1: Initialization**
-$$U, V \sim \mathcal{N}(0, 0.01^2) \in \mathbb{R}^{K \times N}$$
-
-Initialize both matrices with small random values drawn from a Gaussian distribution.
-
-**Step 2: Training Loop**
-
-For each training pair $(X_w, X_c) \in \mathcal{D}$:
-
-**(a) Extract center word embedding:**
-$$U_w = U \cdot X_w \in \mathbb{R}^K$$
-
-**(b) Compute logits:**
-$$z = U_w^T V \in \mathbb{R}^N$$
-
-This computes the score between center word $w$ and all possible context words simultaneously.
-
-**(c) Compute probability distribution:**
-$$P(X_c | X_w; U, V) = \text{softmax}(U_w^T V) = \frac{e^{U_w^T V}}{\sum_{j=1}^N e^{U_w^T V_j}} \in [0,1]^N$$
-
-**(d) Compute negative log-likelihood loss:**
-$$\text{NLL}(U, V | X_w, X_c) = -X_c \cdot \log P_{X_c | X_w}$$
-
-Since $X_c$ is one-hot encoded, this simplifies to:
-$$\text{NLL} = -\log P(X_c = c | X_w = w)$$
-
-where $c$ is the index of the true context word.
-
-**(e) Compute gradients:**
-
-The gradient with respect to the center word embedding:
-$$\nabla_{U_w} \text{NLL} = V \cdot (P_{X_c|X_w} - X_c)^T \in \mathbb{R}^{K \times 1}$$
-
-The gradient with respect to the context word embeddings:
-$$\nabla_V \text{NLL} = U_w \cdot (P_{X_c|X_w} - X_c)^T \in \mathbb{R}^{K \times N}$$
-
-These gradients follow from the chain rule applied to the softmax and cross-entropy loss.
-
-**(f) Update parameters:**
-$$U_w \leftarrow U_w - \eta \nabla_{U_w} \text{NLL}$$
-$$V \leftarrow V - \eta \nabla_V \text{NLL}$$
-
-**Step 3: Repeat**
-
-Continue iterating through the dataset for multiple epochs until convergence.
-
-### Computational Considerations
-
-The softmax normalization requires summing over all $N$ vocabulary words, making each gradient computation $O(KN)$. For large vocabularies, this becomes computationally prohibitive.
-
-**Practical Solutions:**
-1. **Negative Sampling:** Replace softmax with binary classification, sampling only a few negative examples
-2. **Hierarchical Softmax:** Use a binary tree structure to reduce complexity from $O(N)$ to $O(\log N)$
-
-These approximations maintain the essential structure while dramatically improving training efficiency.
-
-### Theoretical Justification
-
-The Word2Vec objective can be understood as factorizing the pointwise mutual information (PMI) matrix. The model learns to represent words such that:
-
-$$U_w^T V_c \approx \text{PMI}(w,c) = \log \frac{P(w,c)}{P(w)P(c)}$$
-
-This provides connection between the embedding geometry and statistical properties of word co-occurrence.
+In the case of NLP, the underlying data generating process lies in the realm of human cognition, which practically speaking is a black box.
 
 ---
 
-## Training Strategies for Word2Vec
+## Recall: The Discriminative Modeling Approach
 
-The computational bottleneck in the standard Word2Vec algorithm lies in the softmax normalization, which requires $O(N)$ operations per training example. For vocabularies with hundreds of thousands of words, this becomes intractable. We present two principal strategies that address this challenge while preserving the essential learning dynamics.
+From Lecture 03, we established the following framework:
 
-### Negative Sampling
+$$
+\mathbf{x} \rightarrow f(\mathbf{x}; \theta) \rightarrow \mathbf{z} \rightarrow \sigma_{\text{SOFTMAX}}(\mathbf{z}) \rightarrow \hat{\mathbf{y}}
+$$
 
-Negative sampling transforms the multi-class classification problem into a series of binary classification problems, dramatically reducing computational complexity.
+Where:
+- $\nabla_{\theta} \text{NLL}$ guides parameter updates
+- Loss: $\mathcal{L}(\theta; \hat{\mathbf{y}}, \mathbf{y}, \mathbf{x})$
 
-#### Mathematical Formulation
+**Softmax Regression:** $f(\mathbf{x}; \theta) = \mathbf{x}\mathbf{W}^T + \mathbf{b}$
 
-**Definition 5.5** Instead of modeling $P(X_c | X_w)$ over all vocabulary words, we model the probability that word $c$ appears in the context of word $w$:
-
-$$P(D = 1 | w, c) = \sigma(U_w^T V_c) = \frac{1}{1 + e^{-U_w^T V_c}}$$
-
-where $D = 1$ indicates that $(w,c)$ is a genuine word-context pair from the corpus, and $\sigma(\cdot)$ is the sigmoid function.
-
-**Negative Sample Generation:** For each positive pair $(w,c)$ from the corpus, we sample $k$ negative context words $\{n_1, n_2, \ldots, n_k\}$ according to a noise distribution $P_n(w)$.
-
-**Definition 5.6** The noise distribution is typically chosen as:
-$$P_n(w) = \frac{[\text{count}(w)]^{3/4}}{\sum_{w' \in \mathcal{V}} [\text{count}(w')]^{3/4}}$$
-
-The $3/4$ exponent smooths the unigram distribution, giving rare words higher sampling probability than their corpus frequency would suggest.
-
-#### Negative Sampling Objective
-
-**Definition 5.7** The negative sampling objective for a single training example $(w,c)$ is:
-
-$$\mathcal{L}_{\text{NEG}}(w,c) = \log \sigma(U_w^T V_c) + \sum_{i=1}^k \mathbb{E}_{n_i \sim P_n} [\log \sigma(-U_w^T V_{n_i})]$$
-
-This objective maximizes the probability of the positive pair while minimizing the probability of negative pairs.
-
-#### Algorithm: Negative Sampling Training
-
-**Input:** Training pair $(w,c)$, negative samples $k$, noise distribution $P_n$
-
-**Step 1:** Sample negative contexts
-$$\{n_1, n_2, \ldots, n_k\} \sim P_n$$
-
-**Step 2:** Compute positive gradient
-$$\nabla_{U_w} \mathcal{L}_{\text{pos}} = V_c \cdot \sigma(-U_w^T V_c)$$
-$$\nabla_{V_c} \mathcal{L}_{\text{pos}} = U_w \cdot \sigma(-U_w^T V_c)$$
-
-**Step 3:** Compute negative gradients
-For each negative sample $n_i$:
-$$\nabla_{U_w} \mathcal{L}_{\text{neg}}^{(i)} = -V_{n_i} \cdot \sigma(U_w^T V_{n_i})$$
-$$\nabla_{V_{n_i}} \mathcal{L}_{\text{neg}}^{(i)} = -U_w \cdot \sigma(U_w^T V_{n_i})$$
-
-**Step 4:** Update parameters
-$$U_w \leftarrow U_w + \eta \left(\nabla_{U_w} \mathcal{L}_{\text{pos}} + \sum_{i=1}^k \nabla_{U_w} \mathcal{L}_{\text{neg}}^{(i)}\right)$$
-
-**Complexity Analysis:** Negative sampling reduces the per-example complexity from $O(KN)$ to $O(K(1+k))$, where typically $k \in [5, 20] \ll N$.
-
-### Hierarchical Softmax
-
-Hierarchical softmax organizes the vocabulary in a binary tree structure, reducing the normalization complexity from $O(N)$ to $O(\log N)$.
-
-#### Tree Construction
-
-**Definition 5.8** Let $\mathcal{T}$ be a binary tree where:
-- Each leaf corresponds to a word $w \in \mathcal{V}$
-- Each internal node $n$ has an associated parameter vector $\theta_n \in \mathbb{R}^K$
-- The path from root to leaf $w$ is denoted $\text{path}(w) = \{n_1, n_2, \ldots, n_{L(w)}\}$
-
-where $L(w)$ is the depth of word $w$ in the tree.
-
-**Huffman Tree Construction:** To minimize expected computation, we construct a Huffman tree where frequent words have shorter paths:
-$$\mathbb{E}_{w \sim P_{\text{corpus}}}[L(w)] = \sum_{w \in \mathcal{V}} P_{\text{corpus}}(w) \cdot L(w)$$
-
-#### Probability Computation
-
-**Definition 5.9** The probability of word $w$ given center word embedding $U_w$ is:
-
-$$P(w | U_w) = \prod_{i=1}^{L(w)} P(\text{choice}_i | U_w, n_i)$$
-
-where $\text{choice}_i \in \{0,1\}$ indicates whether we take the left (0) or right (1) branch at node $n_i$.
-
-**Binary Classification at Each Node:** At internal node $n_i$:
-$$P(\text{choice}_i = 1 | U_w, n_i) = \sigma(U_w^T \theta_{n_i})$$
-$$P(\text{choice}_i = 0 | U_w, n_i) = 1 - \sigma(U_w^T \theta_{n_i})$$
-
-#### Hierarchical Softmax Training
-
-**Step 1:** For training pair $(w,c)$, identify path $\text{path}(c) = \{n_1, \ldots, n_{L(c)}\}$
-
-**Step 2:** Compute loss along path
-$$\mathcal{L}_{\text{HS}}(w,c) = -\sum_{i=1}^{L(c)} \left[ d_i \log \sigma(U_w^T \theta_{n_i}) + (1-d_i) \log \sigma(-U_w^T \theta_{n_i}) \right]$$
-
-where $d_i \in \{0,1\}$ is the direction taken at node $n_i$ on the path to $c$.
-
-**Step 3:** Update parameters
-For each node $n_i$ on the path:
-$$\nabla_{U_w} \mathcal{L}_{\text{HS}} = \sum_{i=1}^{L(c)} \theta_{n_i} \cdot (d_i - \sigma(U_w^T \theta_{n_i}))$$
-$$\nabla_{\theta_{n_i}} \mathcal{L}_{\text{HS}} = U_w \cdot (d_i - \sigma(U_w^T \theta_{n_i}))$$
-
-**Complexity Analysis:** Hierarchical softmax achieves $O(K \log N)$ complexity per example, with the logarithmic factor arising from the tree depth.
-
-### Comparative Analysis
-
-| Strategy | Complexity | Memory | Approximation Quality |
-|----------|------------|--------|----------------------|
-| Full Softmax | $O(KN)$ | $O(KN)$ | Exact |
-| Negative Sampling | $O(K(1+k))$ | $O(KN)$ | High (with sufficient $k$) |
-| Hierarchical Softmax | $O(K \log N)$ | $O(KN + K \log N)$ | Exact |
-
-**Theoretical Guarantees:** Both approximation methods converge to embeddings with similar semantic properties as the full softmax, but with dramatically improved computational efficiency.
-
-**Practical Considerations:**
-- Negative sampling is simpler to implement and often preferred in practice
-- Hierarchical softmax provides exact computation but requires careful tree construction
-- The choice between methods often depends on vocabulary size and available computational resources
+Properties:
+- Convex objective function
+- Linear in $\mathbf{x}$
+- Decision boundaries lie orthogonally in the plane of the input $\mathbf{x}$
 
 ---
 
-## Properties of Learned Embeddings
+## The XOR Problem
 
-Upon convergence, the learned embeddings exhibit remarkable semantic and syntactic structure:
+Consider a simple binary classification problem:
 
-1. **Semantic similarity:** $\text{similarity}(U_{\text{king}}, U_{\text{queen}}) > \text{similarity}(U_{\text{king}}, U_{\text{apple}})$
+| $x_1$ | $x_2$ | $y$ |
+|-------|-------|-----|
+| 0     | 0     | 0   |
+| 0     | 1     | 1   |
+| 1     | 0     | 1   |
+| 1     | 1     | 0   |
 
-2. **Analogical reasoning:** $U_{\text{king}} - U_{\text{man}} + U_{\text{woman}} \approx U_{\text{queen}}$
+⇒ A linear function fails to classify $\mathbf{x}$ correctly!
 
-3. **Dimensional interpretability:** Individual dimensions sometimes correspond to interpretable semantic features
+Linear models such as $\mathbf{x}\mathbf{W}^T + \mathbf{b}$ can only model linear functions. The activation functions allow ANNs to learn non-linear manifolds in the input space.
 
-These properties emerge from the distributional hypothesis and the geometric structure imposed by the inner product similarity measure.
+---
+
+## Neural Networks with Single Hidden Layer
+
+For a simple ANN with one hidden layer:
+
+$$
+f(\mathbf{x}; \theta) = \sigma_a\left(\mathbf{x}\mathbf{W}^{(1)T} + \mathbf{b}^{(1)}\right)\mathbf{W}^{(2)T} + \mathbf{b}^{(2)}
+$$
+
+Where:
+- $\theta = \{\mathbf{W}^{(1)}, \mathbf{b}^{(1)}, \mathbf{W}^{(2)}, \mathbf{b}^{(2)}\}$
+- $\sigma_a(\cdot)$ is an "activation function"
+
+---
+
+## Applying ANNs to the XOR Problem
+
+Let's define:
+- $\mathbf{W}^{(1)} = \begin{bmatrix} 1 & 1 \\ 1 & 1 \end{bmatrix} \in \mathbb{R}^{2 \times 2}$
+- $\mathbf{b}^{(1)} = \begin{bmatrix} 0 & -1 \end{bmatrix} \in \mathbb{R}^{2}$
+- $\mathbf{W}^{(2)} = \begin{bmatrix} 1 & -2 \end{bmatrix} \in \mathbb{R}^{2}$
+- $\mathbf{b}^{(2)} = 0 \in \mathbb{R}$
+- $y \in \{0, 1\}$
+- $\mathbf{X} = \begin{bmatrix} 0 & 0 \\ 0 & 1 \\ 1 & 0 \\ 1 & 1 \end{bmatrix}$
+
+Using $\sigma_a(\mathbf{z}_i) = \max(0, \mathbf{z}_i)$ ⇒ "Rectified Linear Unit" or "ReLU"
+
+---
+
+## XOR Solution with ANN
+
+Computing forward pass:
+
+$$
+\mathbf{X}\mathbf{W}^{(1)T} + \mathbf{b}^{(1)} = \begin{bmatrix} 0 & 0 \\ 1 & 1 \\ 1 & 1 \\ 2 & 2 \end{bmatrix} + \begin{bmatrix} 0 & -1 \\ 1 & 0 \\ 1 & 0 \\ 2 & 1 \end{bmatrix} = \begin{bmatrix} 0 & -1 \\ 1 & 0 \\ 1 & 0 \\ 2 & 1 \end{bmatrix} \rightarrow \mathbf{z}^{(1)}
+$$
+
+$$
+\sigma_a(\mathbf{z}^{(1)}) = \begin{bmatrix} 0 & 0 \\ 1 & 0 \\ 1 & 0 \\ 2 & 1 \end{bmatrix} \rightarrow \mathbf{a}^{(1)}
+$$
+
+$$
+\mathbf{a}^{(1)}\mathbf{W}^{(2)T} + \mathbf{b}^{(2)} = \begin{bmatrix} 0 \\ 1 \\ 1 \\ 0 \end{bmatrix} \Leftrightarrow \begin{bmatrix} 0 & 0 \\ 0 & 1 \\ 1 & 0 \\ 1 & 1 \end{bmatrix} \leftarrow \text{Correct XOR class assignments!}
+$$
+
+**Key insight from the Universal Approximation Theorem:**
+- An ANN with at least one activation layer can approximate ANY continuous function to finite dimensions over a finite domain. This enables ANNs to learn the derivatives of the function.
+
+---
+
+## Activation Functions
+
+Activation functions introduce non-linearity into neural networks:
+
+### Sigmoid
+$$
+\sigma(z) = \frac{1}{1 + e^{-z}}
+$$
+$$
+\nabla_z \sigma(z) = \sigma(z)(1 - \sigma(z))
+$$
+
+### Hyperbolic Tangent (Tanh)
+$$
+\sigma_{\tanh}(z) = \frac{2}{1 + e^{-2z}} - 1
+$$
+$$
+\nabla_z \sigma_{\tanh}(z) = 1 - \sigma_{\tanh}(z)^2
+$$
+
+---
+
+## Activation Functions (Continued)
+
+### Rectified Linear Unit (ReLU)
+$$
+\sigma_{\text{ReLU}}(z) = \begin{cases} z & z \geq 0 \\ 0 & \text{else} \end{cases}
+$$
+$$
+\nabla_z \sigma_{\text{ReLU}}(z) = \begin{cases} 1 & z \geq 0 \\ 0 & \text{else} \end{cases}
+$$
+
+### Leaky ReLU
+$$
+\sigma_{\text{LeakyReLU}}(z) = \begin{cases} z & z \geq 0 \\ \alpha z & \text{else} \end{cases}
+$$
+$$
+\nabla_z \sigma_{\text{LeakyReLU}}(z) = \begin{cases} 1 & z \geq 0 \\ \alpha & \text{else} \end{cases}
+$$
+
+where $\alpha$ is a small constant (e.g., 0.01)
+
+---
+
+## ANN Learning
+
+Recall from Lecture 03:
+
+$$
+\hat{\theta} = \underset{\theta}{\text{argmin}} \text{ NLL}(\theta; \mathcal{D})
+$$
+
+$$
+= \underset{\theta}{\text{argmin}} -\sum_{i=1}^{M} f(\mathbf{x}^{(i)}; \theta)_{y^{(i)}} - \log \sum_{k \in \mathcal{K}} e^{f(\mathbf{x}^{(i)}; \theta)_k}
+$$
+
+$\hat{\theta}$ found via Gradient Descent:
+
+$$
+\nabla_{\theta} \text{NLL} = -\sum_{i=1}^{M} \nabla_{\theta} f(\mathbf{x}^{(i)}; \theta)_{y^{(i)}} - \nabla_{\theta} \log \sum_{k \in \mathcal{K}} e^{f(\mathbf{x}^{(i)}; \theta)_k}
+$$
+
+⇒ **Softmax Regression:** $f(\mathbf{x}; \theta) = \mathbf{x}\mathbf{W}^T + \mathbf{b}$
+
+Properties:
+- NLL is convex
+- Any local minimum is a global minimum
+
+⇒ **ANN:**
+- $\nabla_{\theta} f(\mathbf{x}; \theta)$ requires successive application of the chain rule
+- AKA **Back Propagation**
+- NLL is **non-convex**, many local minima
+
+---
+
+## Statistical Functions for Regularization
+
+Recall that MLE finds $\hat{\theta}_{\text{MLE}}$ that maximizes the likelihood of the observed data:
+
+$$
+\hat{\theta}_{\text{MLE}} = \underset{\theta}{\text{argmax}} \sum_{\mathcal{D}} p(\mathcal{D}; \theta)
+$$
+
+Let's use **Bayes' Theorem** to express a related objective:
+
+$$
+p(\theta | \mathcal{D}^{(i)}) \leftarrow \mathcal{L}(\mathcal{D}; \theta) \leftarrow p(\mathbf{x}, \mathbf{y}) \rightarrow \mathcal{L}(\theta; \mathcal{D}) \rightarrow p(\mathcal{D} | \theta)
+$$
+
+**New Objective:**
+$$
+\hat{\theta}_{\text{MAP}} = \underset{\theta}{\text{argmax}} -\sum_{\mathcal{D}} \log p(\mathcal{D} | \theta)
+$$
+
+$$
+= \underset{\theta}{\text{argmax}} -\sum_{\mathcal{D}} \log \left[\frac{p(\mathcal{D} | \theta)p(\theta)}{p(\mathcal{D})}\right]
+$$
+
+$$
+= \underset{\theta}{\text{argmax}} -\sum_{\mathcal{D}} \log p(\mathcal{D} | \theta) + \log p(\theta) - \log p(\mathcal{D})
+$$
+
+$$
+= \underset{\theta}{\text{argmax}} -\sum_{\mathcal{D}} \log p(\mathcal{D} | \theta) + \log p(\theta)
+$$
+
+---
+
+## Regularization: Common Parameterizations for $p(\theta)$
+
+### (1) Uniform Distribution
+$$
+\theta \sim \text{Unif}(\lambda)
+$$
+$$
+\hat{\theta}_{\text{MAP}} = \underset{\theta}{\text{argmax}} -\sum_{\mathcal{D}} \log p(\mathcal{D} | \theta) + \log \text{Unif}(\lambda)
+$$
+$$
+= \underset{\theta}{\text{argmax}} -\sum_{\mathcal{D}} \log p(\mathcal{D} | \theta)
+$$
+$$
+= \hat{\theta}_{\text{MLE}}
+$$
+
+Thus, MAP is a **generalization** of MLE
+
+### (2) Gaussian Prior on $\theta$
+$$
+\theta \sim \mathcal{N}(0, \sigma_{\theta}^2)
+$$
+$$
+\hat{\theta}_{\text{MAP}} = \underset{\theta}{\text{argmax}} -\sum_{\mathcal{D}} \log p(\mathcal{D} | \theta) + \log \left[\frac{1}{\sqrt{2\pi\sigma_{\theta}^2}} e^{-\frac{\theta^2}{2\sigma_{\theta}^2}}\right]
+$$
+$$
+= \underset{\theta}{\text{argmax}} -\sum_{\mathcal{D}} \log p(\mathcal{D} | \theta) - \frac{\theta^2}{2\sigma_{\theta}^2}
+$$
+
+⇒ **$L_2$ Regularization**
+
+---
+
+## Regularization (Continued)
+
+### (3) Laplace Distribution Prior
+$$
+\theta \sim \text{Laplace}(0, \sigma_{\theta}^2)
+$$
+$$
+\hat{\theta}_{\text{MAP}} = \underset{\theta}{\text{argmax}} -\sum_{\mathcal{D}} \log p(\mathcal{D} | \theta) + \log \left[\frac{1}{2\sigma} e^{-\frac{|\theta|}{\sigma}}\right]
+$$
+$$
+= \underset{\theta}{\text{argmax}} -\sum_{\mathcal{D}} \log p(\mathcal{D} | \theta) - \frac{|\theta|}{\sigma}
+$$
+
+⇒ **$L_1$ Regularization**
+
+---
+
+## Dropout
+
+**Dropout** randomly selects nodes in each hidden layer $\ell_i$ and sets them to zero during training. This is an element-wise operation:
+
+$$
+\mathbf{a}^{(\ell)} = \mathbf{y} \odot \mathbf{M} \odot \mathbf{a}^{(\ell)}
+$$
+
+Where:
+- $\mathbf{M}_j \sim \begin{cases} 0 & \text{with } P = P_{\text{DROP}} \\ 1 & \text{with } P = 1 - P_{\text{DROP}} \end{cases}$
+- $\odot$ is element-wise (Hadamard) product
+- $\gamma$ is a cost function of $P_{\text{DROP}}$
+
+**During training:** $\mathbf{z}_j^{(\ell+1)} = \mathbf{a}^{(\ell)} \mathbf{W}_j^{T(\ell+1)}$
+
+**During inference:** $\mathbf{z}_j^{(\ell+1)} = \alpha^{(\ell)} \mathbf{W}_j^{T(\ell+1)}$
+
+---
+
+## The Bias-Variance Tradeoff
+
+The bias-variance tradeoff is a fundamental concept in machine learning that characterizes the sources of prediction error. For a model predicting target $y$ from input $\mathbf{x}$, the expected squared error can be decomposed into three components.
+
+### Decomposition of Expected Error
+
+**Theorem 5.1 (Bias-Variance Decomposition)** For a learning algorithm that produces predictor $\hat{f}(\mathbf{x})$ from training data $\mathcal{D}$, the expected squared error at a point $\mathbf{x}$ can be written as:
+
+$$
+\mathbb{E}_{\mathcal{D}}[(\hat{f}(\mathbf{x}) - y)^2] = \text{Bias}^2(\hat{f}(\mathbf{x})) + \text{Var}(\hat{f}(\mathbf{x})) + \sigma^2
+$$
+
+where:
+- **Bias:** $\text{Bias}(\hat{f}(\mathbf{x})) = \mathbb{E}_{\mathcal{D}}[\hat{f}(\mathbf{x})] - f^*(\mathbf{x})$
+- **Variance:** $\text{Var}(\hat{f}(\mathbf{x})) = \mathbb{E}_{\mathcal{D}}[(\hat{f}(\mathbf{x}) - \mathbb{E}_{\mathcal{D}}[\hat{f}(\mathbf{x})])^2]$
+- **Irreducible Error:** $\sigma^2 = \mathbb{E}[(y - f^*(\mathbf{x}))^2]$
+
+Here $f^*(\mathbf{x}) = \mathbb{E}[y|\mathbf{x}]$ is the true function we're trying to approximate.
+
+### Interpretation
+
+**Bias** measures systematic errors in the model:
+- How far is the average prediction from the true value?
+- High bias indicates the model is too simple (underfitting)
+- Sources: model assumptions, limited capacity
+
+**Variance** measures sensitivity to training data:
+- How much do predictions vary across different training sets?
+- High variance indicates overfitting to training data
+- Sources: model complexity, limited data
+
+**Irreducible Error** represents inherent noise:
+- Cannot be eliminated by any model
+- Represents stochasticity in the true data-generating process
+
+---
+
+## The Tradeoff in Neural Networks
+
+For neural networks, model capacity is controlled by several factors:
+
+### Network Depth and Width
+- **Shallow, narrow networks:** High bias, low variance
+- **Deep, wide networks:** Low bias, high variance
+
+### Training Duration
+- **Few epochs:** Underfitting (high bias)
+- **Many epochs:** Overfitting (high variance)
+
+### Regularization Strength
+- **Strong regularization ($\lambda$ large):** Higher bias, lower variance
+- **Weak regularization ($\lambda$ small):** Lower bias, higher variance
+
+**Theorem 5.2 (Capacity Control)** The effective capacity of a neural network can be controlled by:
+1. Architecture: number of layers $L$ and hidden units per layer $\{h_1, \ldots, h_L\}$
+2. Regularization: $L_1$, $L_2$ penalties, dropout rate
+3. Training: early stopping, learning rate schedule
+
+### The Sweet Spot
+
+**Definition 5.1** The optimal model complexity occurs where:
+$$
+\hat{\theta}^* = \arg\min_{\theta} \left[\text{Bias}^2(\hat{f}(\cdot; \theta)) + \text{Var}(\hat{f}(\cdot; \theta))\right]
+$$
+
+In practice:
+- **Underfitting:** Both training and validation error are high
+- **Optimal fit:** Low training error, low validation error
+- **Overfitting:** Low training error, high validation error
+
+---
+
+## Learning Rate Scheduling and Annealing
+
+The learning rate $\eta$ is perhaps the most important hyperparameter in neural network training. Too large, and training diverges; too small, and convergence is prohibitively slow. Learning rate scheduling dynamically adjusts $\eta$ during training to balance fast initial progress with fine-tuned convergence.
+
+### The Learning Rate Problem
+
+**Observation 5.1** Using a fixed learning rate presents a dilemma:
+- **Large $\eta$:** Fast initial progress, but oscillates near minima
+- **Small $\eta$:** Slow convergence, may get stuck in poor local minima
+
+**Solution:** Start with a larger learning rate and gradually reduce it during training.
+
+---
+
+## Learning Rate Schedules
+
+### Step Decay
+$$
+\eta_t = \eta_0 \cdot \gamma^{\lfloor t/k \rfloor}
+$$
+
+where:
+- $\eta_0$ is the initial learning rate
+- $\gamma \in (0, 1)$ is the decay factor (typically 0.1 or 0.5)
+- $k$ is the step size (e.g., every 10 epochs)
+
+**Properties:**
+- Simple to implement
+- Piecewise constant learning rate
+- Requires tuning $\gamma$ and $k$
+
+### Exponential Decay
+$$
+\eta_t = \eta_0 \cdot e^{-\lambda t}
+$$
+
+where $\lambda > 0$ controls the decay rate.
+
+**Properties:**
+- Smooth, continuous decay
+- Asymptotically approaches zero
+- Single hyperparameter $\lambda$
+
+### Polynomial Decay
+$$
+\eta_t = \eta_0 \cdot \left(1 + \frac{t}{T}\right)^{-p}
+$$
+
+where:
+- $T$ is the total number of training steps
+- $p > 0$ is the polynomial degree (often $p=1$)
+
+**Properties:**
+- Decays to zero at specific endpoint $T$
+- More control over decay profile via $p$
+
+---
+
+## Advanced Schedules
+
+### Cosine Annealing
+$$
+\eta_t = \eta_{\min} + \frac{1}{2}(\eta_{\max} - \eta_{\min})\left(1 + \cos\left(\frac{t\pi}{T}\right)\right)
+$$
+
+**Properties:**
+- Smooth, gradual decay following cosine curve
+- Popular in modern deep learning (e.g., ResNets)
+- Can restart periodically (cosine annealing with warm restarts)
+
+### Warm Restarts (SGDR)
+Periodically reset learning rate to $\eta_{\max}$ after each cycle of cosine annealing:
+$$
+\eta_t = \eta_{\min} + \frac{1}{2}(\eta_{\max} - \eta_{\min})\left(1 + \cos\left(\frac{t_i\pi}{T_i}\right)\right)
+$$
+
+where $t_i$ is the number of steps since last restart, and $T_i$ is the cycle length.
+
+**Motivation:** Restarts help escape local minima and saddle points.
+
+---
+
+## Learning Rate Warmup
+
+**Definition 5.2** Learning rate warmup gradually increases the learning rate from a small value to the initial target value over the first few epochs.
+
+$$
+\eta_t = \begin{cases}
+\eta_0 \cdot \frac{t}{T_{\text{warmup}}} & t \leq T_{\text{warmup}} \\
+\eta_0 \cdot \text{schedule}(t - T_{\text{warmup}}) & t > T_{\text{warmup}}
+\end{cases}
+$$
+
+**Motivation:**
+- At initialization, parameters are random and gradients may be large and unstable
+- Starting with a large learning rate can cause immediate divergence
+- Warmup allows the network to stabilize before aggressive optimization
+
+**Common Practice:** Use warmup for first 5-10% of training, then apply chosen schedule.
+
+---
+
+## Adaptive Learning Rate Methods
+
+Rather than using a single global learning rate, adaptive methods maintain per-parameter learning rates.
+
+### AdaGrad (Adaptive Gradient)
+$$
+\theta_{t+1} = \theta_t - \frac{\eta}{\sqrt{G_t + \epsilon}} \odot \nabla_{\theta} \mathcal{L}
+$$
+
+where $G_t = \sum_{i=1}^{t} \nabla_{\theta}^{(i)} \odot \nabla_{\theta}^{(i)}$ accumulates squared gradients.
+
+**Properties:**
+- Automatically reduces learning rate for frequently updated parameters
+- Good for sparse data
+- Can become too aggressive (learning rate → 0)
+
+### RMSProp (Root Mean Square Propagation)
+$$
+v_t = \beta v_{t-1} + (1-\beta)(\nabla_{\theta} \mathcal{L})^2
+$$
+$$
+\theta_{t+1} = \theta_t - \frac{\eta}{\sqrt{v_t + \epsilon}} \nabla_{\theta} \mathcal{L}
+$$
+
+**Properties:**
+- Uses exponential moving average instead of cumulative sum
+- Addresses AdaGrad's aggressive decay
+- Popular for RNNs
+
+### Adam (Adaptive Moment Estimation)
+$$
+m_t = \beta_1 m_{t-1} + (1-\beta_1)\nabla_{\theta} \mathcal{L}
+$$
+$$
+v_t = \beta_2 v_{t-1} + (1-\beta_2)(\nabla_{\theta} \mathcal{L})^2
+$$
+$$
+\hat{m}_t = \frac{m_t}{1-\beta_1^t}, \quad \hat{v}_t = \frac{v_t}{1-\beta_2^t}
+$$
+$$
+\theta_{t+1} = \theta_t - \frac{\eta}{\sqrt{\hat{v}_t} + \epsilon} \hat{m}_t
+$$
+
+**Properties:**
+- Combines momentum and adaptive learning rates
+- Bias correction for moments
+- Most popular optimizer in deep learning
+- Typical values: $\beta_1=0.9$, $\beta_2=0.999$, $\epsilon=10^{-8}$
+
+---
+
+## Practical Recommendations
+
+### Choosing a Schedule
+
+**For most applications:**
+1. Start with Adam optimizer (handles learning rate adaptation automatically)
+2. If using SGD with momentum:
+   - Use cosine annealing for image tasks
+   - Use step decay for NLP tasks
+   - Include warmup for transformer models
+
+**Hyperparameter Selection:**
+- **Initial learning rate** $\eta_0$: Often 0.001 for Adam, 0.1 for SGD
+- **Warmup steps**: 1-10% of total training
+- **Decay schedule**: Tuned via validation performance
+
+### Monitoring Training
+
+Track both training and validation metrics to diagnose issues:
+
+| Symptom | Diagnosis | Solution |
+|---------|-----------|----------|
+| Training loss not decreasing | Learning rate too small | Increase $\eta_0$ |
+| Training loss exploding | Learning rate too large | Decrease $\eta_0$, add gradient clipping |
+| Good train, poor validation | Overfitting | Increase regularization, reduce capacity |
+| Poor train, poor validation | Underfitting | Increase capacity, train longer |
+
+---
+
+## Gradient Descent with Momentum
+
+### Stochastic Gradient Descent (SGD) with Simple Momentum
+
+**Set** momentum $\alpha$ and learning rate $\eta$
+
+**Initialize** $\theta$, velocity $\mathbf{v}$
+
+**Repeat:**
+- $\mathbf{x}, \mathbf{y} \sim \mathcal{D}$ (mini-batch, size $m$)
+- $\nabla_{\theta} \leftarrow \frac{1}{m} \sum_{i=1}^{m} \mathcal{L}(\mathbf{x}^{(i)}, \mathbf{y}^{(i)}; \theta)$
+- $\mathbf{v} = \alpha\mathbf{v} - \eta\nabla_{\theta}$
+- $\theta = \theta + \mathbf{v}$
+
+**Until:** Stopping condition
+
+**Popular variants:**
+- Nesterov
+- RMSProp
+- Adam
+
+---
+
+## Neural Networks as Computational Graphs
+
+Consider a simple ANN with single hidden layer:
+
+$$
+P_{y|x} = \frac{e^{f(\mathbf{x}; \theta)}}{\sum_{\bar{z}} e^{f(\mathbf{x}; \theta)_{\bar{z}}}} \quad f(\mathbf{x}; \theta) = \mathbf{a}^{(0)} \mathbf{W}^{(1)T} + \mathbf{b}^{(1)}
+$$
+
+$$
+\mathbf{a}^{(0)} = \max(\mathbf{x}\mathbf{z}^{(0)}, \mathbf{z}^{(0)})
+$$
+
+$$
+\mathbf{z}^{(0)} = \mathbf{x}\mathbf{W}^{(0)T} + \mathbf{b}^{(0)}
+$$
+
+Where:
+- $\mathbf{x} \in \mathbb{Z}_+^N$
+- $\mathbf{z}^{(0)} \in \mathbb{R}^D$
+- $\mathbf{z}^{(1)} \in \mathbb{R}^K$
+- $P_{y|x} \in [0,1]^N$
+
+---
+
+## Recall: The Chain Rule from Calculus
+
+For a nested function of $\mathbf{x}$:
+
+$$
+f_i(f_2(f_1(\mathbf{x})))
+$$
+
+⇒ A nested function of $\mathbf{x}$
+
+The chain rule states:
+
+$$
+\frac{\partial f_i}{\partial \mathbf{x}} = \frac{\partial f_i}{\partial f_2} \cdot \frac{\partial f_2}{\partial f_1} \cdot \frac{\partial f_1}{\partial \mathbf{x}}
+$$
+
+---
+
+## Backpropagation
+
+Recall from Lecture 03 that: $\frac{\partial \mathcal{L}}{\partial \mathbf{z}^{(1)}} = P_{y|x} - \mathbf{y} \in \mathbb{R}^K$
+
+**Backpropagation** returns to the application of the chain rule ("multivariate") to compute the gradient of $\mathcal{L}$ w.r.t. $\theta$.
+
+**For an example:**
+
+$$
+\frac{\partial \mathcal{L}}{\partial \mathbf{z}^{(0)}} = \frac{\partial \mathcal{L}}{\partial \mathbf{z}^{(1)}} \cdot \frac{\partial \mathbf{z}^{(1)}}{\partial \mathbf{L}^{(0)}} = P_{y|x} - \mathbf{y} \in \mathbb{R}^K
+$$
+
+$$
+\frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(0)}} = \frac{\partial \mathcal{L}}{\partial \mathbf{z}^{(0)}} \cdot \frac{\partial \mathbf{z}^{(0)}}{\partial \mathbf{W}^{(0)}} + \frac{\partial \mathcal{L}}{\partial \mathbf{S}^{(0)}} \cdot \frac{\partial \mathbf{S}^{(0)}}{\partial \mathbf{W}^{(0)}} = (P_{y|x} - \mathbf{y}) \cdot \mathbf{a}^{(0)} + \lambda\mathbf{W}^{(0)} \in \mathbb{R}^{K \times D}
+$$
+
+$$
+\frac{\partial \mathcal{L}}{\partial \mathbf{b}^{(0)}} = \frac{\partial \mathcal{L}}{\partial \mathbf{z}^{(0)}} \cdot \frac{\partial \mathbf{z}^{(0)}}{\partial \mathbf{a}^{(0)}} \cdot \frac{\partial \mathbf{a}^{(0)}}{\partial \mathbf{z}^{(0)}} + \frac{\partial \mathcal{L}}{\partial \mathbf{S}^{(0)}} \cdot \frac{\partial \mathbf{S}^{(0)}}{\partial \mathbf{W}^{(0)}} = (P_{y|x} - \mathbf{y}) \cdot \mathbf{W}^{(1)} \cdot (\mathbf{x} \frac{\mathbf{z}^{(0)} \geq 0}{\mathbf{z}^{(0)} < 0}) \cdot 1 \in \mathbb{R}^D
+$$
+
+$$
+\frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(0)}} = \frac{\partial \mathcal{L}}{\partial \mathbf{z}^{(1)}} \cdot \frac{\partial \mathbf{z}^{(1)}}{\partial \mathbf{a}^{(0)}} \cdot \frac{\partial \mathbf{a}^{(0)}}{\partial \mathbf{z}^{(0)}} + \frac{\partial \mathcal{L}}{\partial \mathbf{S}^{(0)}} \cdot \frac{\partial \mathbf{S}^{(0)}}{\partial \mathbf{W}^{(0)}} = (P_{y|x} - \mathbf{y}) \cdot \mathbf{W}^{(1)} \cdot (\mathbf{x} \frac{\mathbf{z}^{(0)} \geq 0}{\mathbf{z}^{(0)} < 0}) \cdot \mathbf{x} + \lambda\mathbf{W}^{(0)} \in \mathbb{R}^{K \times D}
+$$
+
+---
+
+## Summary
+
+- Neural networks introduce non-linearity through activation functions
+- Universal Approximation Theorem guarantees expressiveness
+- Backpropagation enables efficient gradient computation through the chain rule
+- Regularization techniques (L1, L2, Dropout) prevent overfitting
+- The bias-variance tradeoff characterizes the fundamental tension between model simplicity and flexibility
+- Learning rate scheduling and annealing are critical for efficient training and convergence
+- Adaptive methods like Adam provide automatic per-parameter learning rate adjustment
+
+**Next lecture:** We'll apply these neural network fundamentals to language modeling, exploring n-gram models, HMMs, convolutional filtering, energy-based models, and recurrent architectures.
+
