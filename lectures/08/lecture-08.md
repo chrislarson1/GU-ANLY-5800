@@ -1,6 +1,6 @@
 # Lecture 08: Transformers
 
-*Chris Larson | Georgetown University | ANLY-5800 | Fall '25*
+*Instructor: Chris Larson | Georgetown University | ANLY-5800 | Fall '25*
 
 In Lecture 07 we saw how attention mechanisms solve the information bottleneck in sequence-to-sequence models. The Transformer architecture, introduced by Vaswani et al. (2017), takes this idea further by replacing recurrence entirely with self-attention, enabling fully parallel computation and forming the foundation of modern language models.
 
@@ -211,11 +211,11 @@ where $\theta_k = 10000^{-2k/d}$.
 
 **Example:**
 ```
-Corpus: "low low low lower lower newest widest"
-Iteration 1: "lo" + "w" → "low" (most frequent pair)
-Iteration 2: "low" + "er" → "lower"
-Iteration 3: "new" + "est" → "newest"
-...
+   Corpus: "low low low lower lower newest widest"
+   Iteration 1: "lo" + "w" → "low" (most frequent pair)
+   Iteration 2: "low" + "er" → "lower"
+   Iteration 3: "new" + "est" → "newest"
+   ...
 ```
 
 **Encoding (inference):** Greedily apply longest-matching merge rules.
@@ -265,7 +265,7 @@ The Transformer framework supports three architectural variants, each suited to 
 
 **Training objective:** Masked Language Modeling (MLM) — randomly mask 15% of tokens and predict them:
 $$
-\mathcal{L}_{\text{MLM}} = -\sum_{t \in \mathcal{M}} \log p_\theta(x_t \mid x_{\setminus \mathcal{M}})
+\mathcal{L}_{\text{MLM}} = -\sum_{t \in \mathcal{M}} \log p_\theta(x^t \mid x_{\setminus \mathcal{M}})
 $$
 
 **Use cases:**
@@ -286,7 +286,7 @@ $$
 
 **Training objective:** Autoregressive language modeling — predict next token:
 $$
-\mathcal{L}_{\text{AR}} = -\sum_{t=1}^{T} \log p_\theta(x_t \mid x_{<t})
+\mathcal{L}_{\text{AR}} = -\sum_{t=1}^{T} \log p_\theta(x^t \mid x^{<t})
 $$
 
 **Use cases:**
@@ -341,12 +341,12 @@ The choice of training objective determines what the model learns and what tasks
 
 **Definition 7.1 (Autoregressive objective).** For sequence $x_{1:T}$ and parameters $\theta$:
 $$
-\mathcal{L}_{\text{AR}}(\theta) = -\sum_{t=1}^{T} \log p_\theta(x_t \mid x_{<t})
+\mathcal{L}_{\text{AR}}(\theta) = -\sum_{t=1}^{T} \log p_\theta(x^t \mid x^{<t})
 $$
 
 **Factorization:** Uses the chain rule to model the joint distribution:
 $$
-p(x_{1:T}) = \prod_{t=1}^{T} p(x_t \mid x_{<t})
+p(x^{1:T}) = \prod_{t=1}^{T} p(x^t \mid x^{<t})
 $$
 
 **Properties:**
@@ -359,7 +359,7 @@ $$
 
 **Definition 7.2 (Masked language modeling).** With random mask set $\mathcal{M}$ (typically 15% of tokens):
 $$
-\mathcal{L}_{\text{MLM}}(\theta) = -\sum_{t \in \mathcal{M}} \log p_\theta(x_t \mid x_{\setminus \mathcal{M}})
+\mathcal{L}_{\text{MLM}}(\theta) = -\sum_{t \in \mathcal{M}} \log p_\theta(x^t \mid x_{\setminus \mathcal{M}})
 $$
 
 **Masking strategy (BERT):**
@@ -478,8 +478,6 @@ The Transformer architecture revolutionized NLP by replacing recurrence with sel
 - Context length: 2048 (training), extendable with RoPE
 - Batch size: 3.2M tokens
 - Learning rate: $6 \times 10^{-5}$ with warmup
-
-**Next lecture:** We explore how to adapt pretrained Transformers to specific tasks through finetuning, instruction tuning, and alignment with human preferences (RLHF, DPO).
 
 ---
 

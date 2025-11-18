@@ -1,6 +1,6 @@
 # Lecture 01: Mathematical Foundations
 
-*Chris Larson | Georgetown University | ANLY-5800 | Fall '25*
+*Instructor: Chris Larson | Georgetown University | ANLY-5800 | Fall '25*
 
 ## Vector Spaces
 
@@ -10,13 +10,13 @@ We begin with the fundamental mathematical structures underlying machine learnin
 
 $$
 \mathbf{X} = \begin{bmatrix}
-x_{1,1} & \dots & x_{1,N} \\
+x^{(1)}_1 & \dots & x^{(1)}_N \\
 \vdots & \ddots & \vdots \\
-x_{M,1} & \dots & x_{M,N}
+x^{(M)}_1 & \dots & x^{(M)}_N
 \end{bmatrix}
 $$
 
-where $x_{i,j}$ represents the $j$-th feature value of the $i$-th observation, with $M$ observations and $N$ features.
+where $x^{(i)}_j$ represents the $j$-th feature value of the $i$-th observation, with $M$ observations and $N$ features.
 
 The convention aligns with the mathematical structure of linear transformations and optimization procedures that form the algorithmic backbone of machine learning. It is worth noting that some other treatements represent data as the transpose of $\mathbf{X}$; all of the results shown here are invariant to this choice of convention.
 
@@ -24,7 +24,7 @@ The convention aligns with the mathematical structure of linear transformations 
 
 **Definition 1.2** For vectors $\mathbf{a}, \mathbf{b} \in \mathbb{R}^{N}$, the inner product is:
 
-$$\langle \mathbf{a}, \mathbf{b} \rangle = \mathbf{a}^T \mathbf{b} = \sum_{i=1}^{N} a_i b_i$$
+$$\langle \mathbf{a}, \mathbf{b} \rangle = \mathbf{a}^T \mathbf{b} = \sum_{j=1}^{N} a_j b_j$$
 
 The inner product induces a geometric structure on our feature space. It provides both a notion of angle between vectors via $\cos \theta = \frac{\langle \mathbf{a}, \mathbf{b} \rangle}{\Vert\mathbf{a}\Vert \cdot \Vert\mathbf{b}\Vert}$ and serves as the fundamental operation in linear models.
 
@@ -41,7 +41,7 @@ A norm on a vector space provides a notion of magnitude. For our purposes, we re
 
 The $L_p$ norms form a parametric family:
 
-$$\Vert\mathbf{x}\Vert_p = \left(\sum_{i=1}^{N} |x_i|^p\right)^{1/p}$$
+$$\Vert\mathbf{x}\Vert_p = \left(\sum_{j=1}^{N} |x_j|^p\right)^{1/p}$$
 
 Of particular importance are $L_1$ (Manhattan) and $L_2$ (Euclidean) norms, which induce different geometric properties and optimization behavior.
 
@@ -219,13 +219,13 @@ This provides the mathematical foundation for Bayesian inference and posterior p
 
 Given a specific choice of model, MLE provides a principled way to select parameters by maximizing the joint probability of the observed data under the model: choose parameters that make the observed dataset most *likley* under our model.
 
-Let $\mathcal{D} = \{\mathbf{x}_1, \ldots, \mathbf{x}_n\}$ be the data and $p(\cdot\,;\,\boldsymbol{\theta})$ a parametric family. We maximize the joint probability of the data under the model:
+Let $\mathcal{D} = \{\mathbf{x}^{(1)}, \ldots, \mathbf{x}^{(M)}\}$ be the data and $p(\cdot\,;\,\boldsymbol{\theta})$ a parametric family. We maximize the joint probability of the data under the model:
 
 $$\hat{\boldsymbol{\theta}} = \arg\max_{\boldsymbol{\theta}} P(\mathcal{D}\mid\boldsymbol{\theta}).$$
 
 Under the common i.i.d. assumption, the joint factorizes as a product, yielding a tractable likelihood:
 
-$$P(\mathcal{D}\mid\boldsymbol{\theta}) = \prod_{i=1}^{n} p(\mathbf{x}_i; \boldsymbol{\theta}), \quad \ell(\boldsymbol{\theta}) = \sum_{i=1}^{n} \log p(\mathbf{x}_i; \boldsymbol{\theta}).$$
+$$P(\mathcal{D}\mid\boldsymbol{\theta}) = \prod_{i=1}^{M} p(\mathbf{x}^{(i)}; \boldsymbol{\theta}), \quad \ell(\boldsymbol{\theta}) = \sum_{i=1}^{M} \log p(\mathbf{x}^{(i)}; \boldsymbol{\theta}).$$
 
 Modeling assumptions make this optimization tractable:
 - samples in $D$ are i.i.d.
@@ -234,18 +234,18 @@ Modeling assumptions make this optimization tractable:
 
 In practice, we minimize negative log-likelihood (NLL), equivalently maximizing log-likelihood:
 
-$$\hat{\boldsymbol{\theta}} = \arg\min_{\boldsymbol{\theta}} \Big(-\frac{1}{n}\sum_{i=1}^{n} \log p(\mathbf{x}_i; \boldsymbol{\theta})\Big),$$
+$$\hat{\boldsymbol{\theta}} = \arg\min_{\boldsymbol{\theta}} \Big(-\frac{1}{M}\sum_{i=1}^{M} \log p(\mathbf{x}^{(i)}; \boldsymbol{\theta})\Big),$$
 
 which is empirical risk minimization with loss $\;\mathcal{L}(\mathbf{x};\boldsymbol{\theta}) = -\log p(\mathbf{x};\boldsymbol{\theta}).$
 
 
-**Definition 4.1** Given independent observations $\mathbf{x}_1, \ldots, \mathbf{x}_n$ from distribution $p(\cdot; \boldsymbol{\theta})$, the likelihood function is:
+**Definition 4.1** Given independent observations $\mathbf{x}^{(1)}, \ldots, \mathbf{x}^{(M)}$ from distribution $p(\cdot; \boldsymbol{\theta})$, the likelihood function is:
 
-$$L(\boldsymbol{\theta}) = \prod_{i=1}^{n} p(\mathbf{x}_i; \boldsymbol{\theta})$$
+$$L(\boldsymbol{\theta}) = \prod_{i=1}^{M} p(\mathbf{x}^{(i)}; \boldsymbol{\theta})$$
 
 **Definition 4.2** The maximum likelihood estimator (MLE) is:
 
-$$\hat{\boldsymbol{\theta}}_{MLE} = \arg\max_{\boldsymbol{\theta}} L(\boldsymbol{\theta}) = \arg\max_{\boldsymbol{\theta}} \sum_{i=1}^{n} \log p(\mathbf{x}_i; \boldsymbol{\theta})$$
+$$\hat{\boldsymbol{\theta}}_{MLE} = \arg\max_{\boldsymbol{\theta}} L(\boldsymbol{\theta}) = \arg\max_{\boldsymbol{\theta}} \sum_{i=1}^{M} \log p(\mathbf{x}^{(i)}; \boldsymbol{\theta})$$
 
 The logarithmic transformation converts products to sums; this simplifies analysis, and most importantly, solves the numerical stability problem inherent in multiplying a large number of probability values together.
 
@@ -253,35 +253,35 @@ The logarithmic transformation converts products to sums; this simplifies analys
 
 $$\hat{\boldsymbol{\theta}}_{MLE} \xrightarrow{P} \boldsymbol{\theta}_0$$
 
-as $n \to \infty$, where $\boldsymbol{\theta}_0$ is the true parameter value.
+as $M \to \infty$, where $\boldsymbol{\theta}_0$ is the true parameter value.
 
 Intuition and implications
-- As $n$ grows, the (average) log-likelihood concentrates around its expectation. If the model is identifiable and regularity conditions hold, the maximizer must approach the true parameter.
+- As $M$ grows, the (average) log-likelihood concentrates around its expectation. If the model is identifiable and regularity conditions hold, the maximizer must approach the true parameter.
 - Guarantees that more data improves estimation quality in a well-specified model.
 - Can fail with model misspecification, non-identifiability, boundary parameters, or violated regularity.
 
 **Theorem 4.2 (Asymptotic Normality of MLE)** Under regularity conditions:
 
-$$\sqrt{n}(\hat{\boldsymbol{\theta}}_{MLE} - \boldsymbol{\theta}_0) \xrightarrow{D} \mathcal{N}(\mathbf{0}, \mathcal{I}^{-1}(\boldsymbol{\theta}_0))$$
+$$\sqrt{M}(\hat{\boldsymbol{\theta}}_{MLE} - \boldsymbol{\theta}_0) \xrightarrow{D} \mathcal{N}(\mathbf{0}, \mathcal{I}^{-1}(\boldsymbol{\theta}_0))$$
 
 where $\mathcal{I}(\boldsymbol{\theta})$ is the Fisher information matrix.
 
 Intuition and implications
 
 - By a CLT-flavor argument, the score (gradient of log-likelihood) is asymptotically normal with variance equal to Fisher information; smoothness yields a normal approximation for the estimator.
-- Enables approximate standard errors and confidence intervals: $\operatorname{SE}(\hat{\theta}_j) \approx \sqrt{[\mathcal{I}^{-1}(\hat{\boldsymbol{\theta}})/n]_{jj}}$.
+- Enables approximate standard errors and confidence intervals: $\operatorname{SE}(\hat{\theta}_j) \approx \sqrt{[\mathcal{I}^{-1}(\hat{\boldsymbol{\theta}})/M]_{jj}}$.
 - Supports Wald tests and connects to the Cramér–Rao bound: the MLE is asymptotically efficient in well-specified, regular models.
 - Caveats: small samples, boundary solutions, heavy tails, or non-regular models can invalidate the approximation.
 
-**Example 4.1** For Bernoulli trials with $n$ observations and $k$ successes, the MLE for parameter $\theta$ is:
+**Example 4.1** For Bernoulli trials with $M$ observations and $k$ successes, the MLE for parameter $\theta$ is:
 
-$$\hat{\theta}_{MLE} = \frac{k}{n}$$
+$$\hat{\theta}_{MLE} = \frac{k}{M}$$
 
 This follows from maximizing the log-likelihood:
 
-$$\ell(\theta) = k \log \theta + (n-k) \log(1-\theta)$$
+$$\ell(\theta) = k \log \theta + (M-k) \log(1-\theta)$$
 
-Setting $\frac{d\ell}{d\theta} = \frac{k}{\theta} - \frac{n-k}{1-\theta} = 0$ yields the result.
+Setting $\frac{d\ell}{d\theta} = \frac{k}{\theta} - \frac{M-k}{1-\theta} = 0$ yields the result.
 
 ---
 
@@ -399,15 +399,15 @@ Thus, cross-entropy as the natural loss function for probabilistic classificatio
 
 # Appendix
 
-## [A.1] Derivation of the maximum likelihood estimate of N-coin flips
+## [A.1] Derivation of the maximum likelihood estimate of M-coin flips
 
-Solving for the maximum likelihood estimate of $n$ independent coin flips amounts to deriving a the MLE estimate for the Bernoulli parameter, $\theta$.
+Solving for the maximum likelihood estimate of $M$ independent coin flips amounts to deriving a the MLE estimate for the Bernoulli parameter, $\theta$.
 
-Consider $n$ independent coin flips, where each flip has probability $\theta$ of resulting in heads. Let $X_i$ denote the outcome of the $i$-th flip, where $X_i = 1$ indicates heads and $X_i = 0$ indicates tails. We observe $k = \sum_{i=1}^{n} X_i$ heads out of $n$ total flips.
+Consider $M$ independent coin flips, where each flip has probability $\theta$ of resulting in heads. Let $X^{(i)}$ denote the outcome of the $i$-th flip, where $X^{(i)} = 1$ indicates heads and $X^{(i)} = 0$ indicates tails. We observe $k = \sum_{i=1}^{M} X^{(i)}$ heads out of $M$ total flips.
 
-Each $X_i$ follows a Bernoulli distribution with parameter $\theta$:
+Each $X^{(i)}$ follows a Bernoulli distribution with parameter $\theta$:
 
-$$P(X_i = x_i) = \theta^{x_i}(1-\theta)^{1-x_i}, \quad x_i \in \{0,1\}$$
+$$P(X^{(i)} = x^{(i)}) = \theta^{x^{(i)}}(1-\theta)^{1-x^{(i)}}, \quad x^{(i)} \in \{0,1\}$$
 
 We seek the maximum likelihood estimator $\hat{\theta}_{MLE}$.
 
@@ -415,87 +415,87 @@ We seek the maximum likelihood estimator $\hat{\theta}_{MLE}$.
 
 Since the coin flips are independent, the joint probability mass function is the product of individual probabilities:
 
-$$L(\theta) = P(X_1 = x_1, X_2 = x_2, \ldots, X_n = x_n; \theta) = \prod_{i=1}^{n} P(X_i = x_i; \theta)$$
+$$L(\theta) = P(X^{(1)} = x^{(1)}, X^{(2)} = x^{(2)}, \ldots, X^{(M)} = x^{(M)}; \theta) = \prod_{i=1}^{M} P(X^{(i)} = x^{(i)}; \theta)$$
 
 Substituting the Bernoulli PMF:
 
-$$L(\theta) = \prod_{i=1}^{n} \theta^{x_i}(1-\theta)^{1-x_i}$$
+$$L(\theta) = \prod_{i=1}^{M} \theta^{x^{(i)}}(1-\theta)^{1-x^{(i)}}$$
 
 Using properties of exponents:
 
-$$L(\theta) = \prod_{i=1}^{n} \theta^{x_i} \prod_{i=1}^{n} (1-\theta)^{1-x_i}$$
+$$L(\theta) = \prod_{i=1}^{M} \theta^{x^{(i)}} \prod_{i=1}^{M} (1-\theta)^{1-x^{(i)}}$$
 
-$$L(\theta) = \theta^{\sum_{i=1}^{n} x_i}\,(1-\theta)^{\sum_{i=1}^{n} (1-x_i)}$$
+$$L(\theta) = \theta^{\sum_{i=1}^{M} x^{(i)}}\,(1-\theta)^{\sum_{i=1}^{M} (1-x^{(i)})}$$
 
 Since
 
 $$
-\sum_{i=1}^{n} x_i = k
+\sum_{i=1}^{M} x^{(i)} = k
 $$
 and
 $$
-\sum_{i=1}^{n} (1-x_i) = n - k
+\sum_{i=1}^{M} (1-x^{(i)}) = M - k
 $$:
 
-$$L(\theta) = \theta^k (1-\theta)^{n-k}$$
+$$L(\theta) = \theta^k (1-\theta)^{M-k}$$
 
 ### Log-Likelihood Function
 
 Taking the natural logarithm:
 
-$$\ell(\theta) = \log L(\theta) = \log[\theta^k (1-\theta)^{n-k}]$$
+$$\ell(\theta) = \log L(\theta) = \log[\theta^k (1-\theta)^{M-k}]$$
 
 Using logarithm properties:
 
-$$\ell(\theta) = k \log \theta + (n-k) \log(1-\theta)$$
+$$\ell(\theta) = k \log \theta + (M-k) \log(1-\theta)$$
 
 ### Find the Critical Point
 
 To find the maximum, we differentiate with respect to $\theta$ and set equal to zero:
 
-$$\frac{d\ell(\theta)}{d\theta} = \frac{d}{d\theta}[k \log \theta + (n-k) \log(1-\theta)]$$
+$$\frac{d\ell(\theta)}{d\theta} = \frac{d}{d\theta}[k \log \theta + (M-k) \log(1-\theta)]$$
 
-$$\frac{d\ell(\theta)}{d\theta} = k \cdot \frac{1}{\theta} + (n-k) \cdot \frac{1}{1-\theta} \cdot (-1)$$
+$$\frac{d\ell(\theta)}{d\theta} = k \cdot \frac{1}{\theta} + (M-k) \cdot \frac{1}{1-\theta} \cdot (-1)$$
 
-$$\frac{d\ell(\theta)}{d\theta} = \frac{k}{\theta} - \frac{n-k}{1-\theta}$$
+$$\frac{d\ell(\theta)}{d\theta} = \frac{k}{\theta} - \frac{M-k}{1-\theta}$$
 
 Setting the first derivative equal to zero:
 
-$$\frac{k}{\theta} - \frac{n-k}{1-\theta} = 0$$
+$$\frac{k}{\theta} - \frac{M-k}{1-\theta} = 0$$
 
 ### Solve for θ
 
 Rearranging:
 
-$$\frac{k}{\theta} = \frac{n-k}{1-\theta}$$
+$$\frac{k}{\theta} = \frac{M-k}{1-\theta}$$
 
 Cross-multiplying:
 
-$$k(1-\theta) = \theta(n-k)$$
+$$k(1-\theta) = \theta(M-k)$$
 
 Expanding:
 
-$$k - k\theta = \theta n - k\theta$$
+$$k - k\theta = \theta M - k\theta$$
 
-$$k = \theta n$$
+$$k = \theta M$$
 
 Therefore:
 
-$$\hat{\theta}_{MLE} = \frac{k}{n}$$
+$$\hat{\theta}_{MLE} = \frac{k}{M}$$
 
 ### Verify Maximum
 
 We verify this is indeed a maximum by checking the second derivative:
 
-$$\frac{d^2\ell(\theta)}{d\theta^2} = \frac{d}{d\theta}\left[\frac{k}{\theta} - \frac{n-k}{1-\theta}\right]$$
+$$\frac{d^2\ell(\theta)}{d\theta^2} = \frac{d}{d\theta}\left[\frac{k}{\theta} - \frac{M-k}{1-\theta}\right]$$
 
-$$\frac{d^2\ell(\theta)}{d\theta^2} = -\frac{k}{\theta^2} - \frac{n-k}{(1-\theta)^2}$$
+$$\frac{d^2\ell(\theta)}{d\theta^2} = -\frac{k}{\theta^2} - \frac{M-k}{(1-\theta)^2}$$
 
-Since $k \geq 0$, $n-k \geq 0$, and $\theta \in (0,1)$, we have:
+Since $k \geq 0$, $M-k \geq 0$, and $\theta \in (0,1)$, we have:
 
 $$\frac{d^2\ell(\theta)}{d\theta^2} < 0$$
 
-The second derivative is negative for all $\theta \in (0,1)$, confirming that $\hat{\theta}_{MLE} = \frac{k}{n}$ is indeed a maximum.
+The second derivative is negative for all $\theta \in (0,1)$, confirming that $\hat{\theta}_{MLE} = \frac{k}{M}$ is indeed a maximum.
 
 ### Interpretation
 
@@ -505,7 +505,7 @@ The MLE for the Bernoulli parameter is simply the observed proportion of success
 
 Note that we must consider the constraints $\theta \in [0,1]$:
 - If $k = 0$, then $\hat{\theta}_{MLE} = 0$
-- If $k = n$, then $\hat{\theta}_{MLE} = 1$
-- If $0 < k < n$, then $\hat{\theta}_{MLE} = \frac{k}{n} \in (0,1)$
+- If $k = M$, then $\hat{\theta}_{MLE} = 1$
+- If $0 < k < M$, then $\hat{\theta}_{MLE} = \frac{k}{M} \in (0,1)$
 
-In all cases, the MLE is the sample proportion $\frac{k}{n}$.
+In all cases, the MLE is the sample proportion $\frac{k}{M}$.

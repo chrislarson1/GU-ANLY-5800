@@ -1,6 +1,6 @@
 # Lecture 05: Neural Networks
 
-*Chris Larson | Georgetown University | ANLY-5800 | Fall '25*
+*Instructor: Chris Larson | Georgetown University | ANLY-5800 | Fall '25*
 
 ### Introduction to Artificial Neural Networks
 

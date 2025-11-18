@@ -88,7 +88,7 @@ Date | Lecture | Topics | Key Readings |
 | [Assignment 1]() | 10% | individual | - |
 | [Assignment 2]() | 10% | individual | - |
 | [Assignment 3]() | 10% | individual | - |
-| [Assignment 4]() | 5% | individual | - |
+<!-- | [Assignment 4]() | 5% | individual | - | -->
 | [Exam 1]() | 15% | individual | - |
 | [Exam 2]() | 15% | individual | - |
 | [Exam 3]() | 15% | individual | - |

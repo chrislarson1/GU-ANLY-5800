@@ -1,6 +1,6 @@
 # Lecture 03: Statistical Learning for Text Classification
 
-*Chris Larson | Georgetown University | ANLY-5800 | Fall '25*
+*Instructor: Chris Larson | Georgetown University | ANLY-5800 | Fall '25*
 
 In Lecture 02, we introduced the classification problem and examined geometric approaches based on decision boundaries. We now shift our focus to probabilistic frameworks for classification, developing two complementary perspectives: generative models that learn the joint distribution $P(\mathbf{x}, y)$, and discriminative models that learn the conditional distribution $P(y|\mathbf{x})$ directly.
 
@@ -8,7 +8,7 @@ In Lecture 02, we introduced the classification problem and examined geometric a
 
 Machine learning algorithms can be categorized by how they model the relationship between the random variables at play within a given problem setting.
 
-**Definition 1.1** Given training data $\mathcal{D} = \{(\mathbf{x}_i, y_i)\}_{i=1}^{M}$ where $\mathbf{x}_i \in \mathbb{R}^N$ and $y_i \in \mathcal{Y}$:
+**Definition 1.1** Given training data $\mathcal{D} = \{(\mathbf{x}^{(i)}, y^{(i)})\}_{i=1}^{M}$ where $\mathbf{x}^{(i)} \in \mathbb{R}^N$ and $y^{(i)} \in \mathcal{Y}$:
 
 - A **generative model** learns the joint distribution $P(\mathbf{x}, y; \boldsymbol{\theta})$ and performs inference via Bayes' rule:
   $$\hat{y} = \arg\max_{y \in \mathcal{Y}} P(y|\mathbf{x}) = \arg\max_{y \in \mathcal{Y}} \frac{P(\mathbf{x}|y; \boldsymbol{\phi})P(y; \boldsymbol{\lambda})}{P(\mathbf{x})}$$
@@ -68,11 +68,11 @@ We estimate model parameters via maximum likelihood estimation.
 
 $$\hat{\lambda}_k = \frac{M_k}{M}$$
 
-where $M_k = \sum_{i=1}^{M} \mathbb{I}(y_i = k)$ is the count of training examples in class $k$.
+where $M_k = \sum_{i=1}^{M} \mathbb{I}(y^{(i)} = k)$ is the count of training examples in class $k$.
 
 **Proof:** The log-likelihood for $\boldsymbol{\lambda}$ with constraint $\sum_{k=1}^{K} \lambda_k = 1$ is:
 
-$$\mathcal{L}(\boldsymbol{\lambda}) = \sum_{i=1}^{M} \log P(y_i; \boldsymbol{\lambda}) = \sum_{k=1}^{K} M_k \log \lambda_k$$
+$$\mathcal{L}(\boldsymbol{\lambda}) = \sum_{i=1}^{M} \log P(y^{(i)}; \boldsymbol{\lambda}) = \sum_{k=1}^{K} M_k \log \lambda_k$$
 
 Using Lagrange multipliers:
 
@@ -90,11 +90,11 @@ Therefore: $\hat{\lambda}_k = \frac{M_k}{M}$
 
 **Theorem 2.2 (MLE for Feature Parameters)** The maximum likelihood estimate for the multinomial parameters is:
 
-$$\hat{\phi}_{k,j} = \frac{\sum_{i=1}^{M} \mathbb{I}(y_i = k) x_{i,j}}{\sum_{i=1}^{M} \mathbb{I}(y_i = k) \sum_{j'=1}^{N} x_{i,j'}} = \frac{\text{count}(y=k, x=j)}{\text{count}(y=k, \text{ all words})}$$
+$$\hat{\phi}_{k,j} = \frac{\sum_{i=1}^{M} \mathbb{I}(y^{(i)} = k) x^{(i)}_j}{\sum_{i=1}^{M} \mathbb{I}(y^{(i)} = k) \sum_{j'=1}^{N} x^{(i)}_{j'}} = \frac{\text{count}(y=k, x=j)}{\text{count}(y=k, \text{ all words})}$$
 
 **Proof sketch:** The log-likelihood with respect to $\boldsymbol{\phi}_k$ subject to $\sum_j \phi_{k,j} = 1$ is:
 
-$$\mathcal{L}(\boldsymbol{\phi}_k) = \sum_{i: y_i=k} \sum_{j=1}^{N} x_{i,j} \log \phi_{k,j}$$
+$$\mathcal{L}(\boldsymbol{\phi}_k) = \sum_{i: y^{(i)}=k} \sum_{j=1}^{N} x^{(i)}_j \log \phi_{k,j}$$
 
 Following the same Lagrange multiplier approach as above yields the stated result.
 
@@ -104,7 +104,7 @@ Following the same Lagrange multiplier approach as above yields the stated resul
 
 **Definition 2.4** The MLE can yield zero probabilities for words not observed in the training set for a given class. **Laplace smoothing** (or additive smoothing) addresses this by adding a pseudo-count $\alpha > 0$:
 
-$$\hat{\phi}_{k,j} = \frac{\alpha + \sum_{i=1}^{M} \mathbb{I}(y_i = k) x_{i,j}}{\alpha N + \sum_{i=1}^{M} \mathbb{I}(y_i = k) \sum_{j'=1}^{N} x_{i,j'}}$$
+$$\hat{\phi}_{k,j} = \frac{\alpha + \sum_{i=1}^{M} \mathbb{I}(y^{(i)} = k) x^{(i)}_j}{\alpha N + \sum_{i=1}^{M} \mathbb{I}(y^{(i)} = k) \sum_{j'=1}^{N} x^{(i)}_{j'}}$$
 
 where $\alpha = 1$ corresponds to standard Laplace smoothing.
 
@@ -173,40 +173,40 @@ $$(\mathbf{w}_i - \mathbf{w}_j)^T \mathbf{x} + (b_i - b_j) = 0$$
 
 **Definition 3.3** The negative log-likelihood (NLL) for softmax regression is:
 
-$$\text{NLL}(\boldsymbol{\theta}) = -\sum_{i=1}^{M} \log P(y_i|\mathbf{x}_i; \boldsymbol{\theta}) = -\sum_{i=1}^{M} \sum_{k=1}^{K} \mathbb{I}(y_i = k) \log P(y=k|\mathbf{x}_i; \boldsymbol{\theta})$$
+$$\text{NLL}(\boldsymbol{\theta}) = -\sum_{i=1}^{M} \log P(y^{(i)}|\mathbf{x}^{(i)}; \boldsymbol{\theta}) = -\sum_{i=1}^{M} \sum_{k=1}^{K} \mathbb{I}(y^{(i)} = k) \log P(y=k|\mathbf{x}^{(i)}; \boldsymbol{\theta})$$
 
 **Remark 3.2** Recall from Lecture 01 that minimizing NLL is equivalent to minimizing cross-entropy $H(P_{\text{data}}, P_{\text{model}})$ and thus equivalent to minimizing KL divergence $D_{KL}(P_{\text{data}} \parallel P_{\text{model}})$.
 
 **Theorem 3.1 (Gradient of Softmax Regression)** The gradient of the NLL with respect to $\mathbf{w}_k$ is:
 
-$$\nabla_{\mathbf{w}_k} \text{NLL}(\boldsymbol{\theta}) = \sum_{i=1}^{M} \left(P(y=k|\mathbf{x}_i; \boldsymbol{\theta}) - \mathbb{I}(y_i = k)\right) \mathbf{x}_i$$
+$$\nabla_{\mathbf{w}_k} \text{NLL}(\boldsymbol{\theta}) = \sum_{i=1}^{M} \left(P(y=k|\mathbf{x}^{(i)}; \boldsymbol{\theta}) - \mathbb{I}(y^{(i)} = k)\right) \mathbf{x}^{(i)}$$
 
-**Proof:** Let $p_{i,k} = P(y=k|\mathbf{x}_i; \boldsymbol{\theta})$ denote the predicted probability. The NLL is:
+**Proof:** Let $p_{i,k} = P(y=k|\mathbf{x}^{(i)}; \boldsymbol{\theta})$ denote the predicted probability. The NLL is:
 
-$$\text{NLL} = -\sum_{i=1}^{M} \sum_{k=1}^{K} \mathbb{I}(y_i = k) \log p_{i,k}$$
+$$\text{NLL} = -\sum_{i=1}^{M} \sum_{k=1}^{K} \mathbb{I}(y^{(i)} = k) \log p_{i,k}$$
 
 Taking the derivative:
 
-$$\frac{\partial \text{NLL}}{\partial \mathbf{w}_k} = -\sum_{i=1}^{M} \sum_{k'=1}^{K} \mathbb{I}(y_i = k') \frac{1}{p_{i,k'}} \frac{\partial p_{i,k'}}{\partial \mathbf{w}_k}$$
+$$\frac{\partial \text{NLL}}{\partial \mathbf{w}_k} = -\sum_{i=1}^{M} \sum_{k'=1}^{K} \mathbb{I}(y^{(i)} = k') \frac{1}{p_{i,k'}} \frac{\partial p_{i,k'}}{\partial \mathbf{w}_k}$$
 
-The key is computing $\frac{\partial p_{i,k'}}{\partial \mathbf{w}_k}$. For the softmax function with $z_k = \mathbf{w}_k^T \mathbf{x}_i + b_k$:
+The key is computing $\frac{\partial p_{i,k'}}{\partial \mathbf{w}_k}$. For the softmax function with $z_k = \mathbf{w}_k^T \mathbf{x}^{(i)} + b_k$:
 
 $$\frac{\partial p_{i,k'}}{\partial z_k} = \begin{cases}
 p_{i,k}(1 - p_{i,k}) & \text{if } k' = k \\
 -p_{i,k} p_{i,k'} & \text{if } k' \neq k
 \end{cases}$$
 
-Since $\frac{\partial z_k}{\partial \mathbf{w}_k} = \mathbf{x}_i$, we have:
+Since $\frac{\partial z_k}{\partial \mathbf{w}_k} = \mathbf{x}^{(i)}$, we have:
 
-$$\frac{\partial \text{NLL}}{\partial \mathbf{w}_k} = -\sum_{i=1}^{M} \left[\mathbb{I}(y_i = k)(1 - p_{i,k})\mathbf{x}_i - \sum_{k' \neq k} \mathbb{I}(y_i = k') p_{i,k} \mathbf{x}_i\right]$$
+$$\frac{\partial \text{NLL}}{\partial \mathbf{w}_k} = -\sum_{i=1}^{M} \left[\mathbb{I}(y^{(i)} = k)(1 - p_{i,k})\mathbf{x}^{(i)} - \sum_{k' \neq k} \mathbb{I}(y^{(i)} = k') p_{i,k} \mathbf{x}^{(i)}\right]$$
 
 Simplifying:
 
-$$= -\sum_{i=1}^{M} \left[\mathbb{I}(y_i = k)\mathbf{x}_i - p_{i,k}\mathbf{x}_i\right] = \sum_{i=1}^{M} (p_{i,k} - \mathbb{I}(y_i = k))\mathbf{x}_i$$
+$$= -\sum_{i=1}^{M} \left[\mathbb{I}(y^{(i)} = k)\mathbf{x}^{(i)} - p_{i,k}\mathbf{x}^{(i)}\right] = \sum_{i=1}^{M} (p_{i,k} - \mathbb{I}(y^{(i)} = k))\mathbf{x}^{(i)}$$
 
 **Corollary 3.1** The gradient with respect to the bias term is:
 
-$$\nabla_{b_k} \text{NLL}(\boldsymbol{\theta}) = \sum_{i=1}^{M} (P(y=k|\mathbf{x}_i; \boldsymbol{\theta}) - \mathbb{I}(y_i = k))$$
+$$\nabla_{b_k} \text{NLL}(\boldsymbol{\theta}) = \sum_{i=1}^{M} (P(y=k|\mathbf{x}^{(i)}; \boldsymbol{\theta}) - \mathbb{I}(y^{(i)} = k))$$
 
 **Interpretation:** The gradient has an intuitive form: it's the sum over training examples of the prediction error weighted by the input features. When the model predicts class $k$ with probability 1 but the true class is different, the gradient is large. When predictions match labels, the contribution is zero.
 
@@ -218,7 +218,7 @@ The standard approach to minimizing NLL uses gradient descent:
 
 $$
 \begin{aligned}
-&\textbf{Input:} \quad \mathcal{D} = \{(\mathbf{x}_i, y_i)\}_{i=1}^M,\ \eta > 0,\ T_{\max} \\
+&\textbf{Input:} \quad \mathcal{D} = \{(\mathbf{x}^{(i)}, y^{(i)})\}_{i=1}^M,\ \eta > 0,\ T_{\max} \\
 &\textbf{Initialize:} \quad \mathbf{w}_k = \mathbf{0}, b_k = 0 \text{ for all } k \\
 &\textbf{For } t = 1 \text{ to } T_{\max}: \\
 &\quad \text{Compute } \nabla_{\mathbf{w}_k} \text{NLL}(\boldsymbol{\theta}^{(t)}) \text{ and } \nabla_{b_k} \text{NLL}(\boldsymbol{\theta}^{(t)}) \text{ for all } k \\
@@ -237,7 +237,7 @@ $$
 
 **Proof sketch:** The NLL can be written as:
 
-$$\text{NLL}(\boldsymbol{\theta}) = \sum_{i=1}^{M} \left[\log \sum_{k=1}^{K} \exp(\mathbf{w}_k^T \mathbf{x}_i + b_k) - \sum_{k=1}^{K} \mathbb{I}(y_i=k)(\mathbf{w}_k^T \mathbf{x}_i + b_k)\right]$$
+$$\text{NLL}(\boldsymbol{\theta}) = \sum_{i=1}^{M} \left[\log \sum_{k=1}^{K} \exp(\mathbf{w}_k^T \mathbf{x}^{(i)} + b_k) - \sum_{k=1}^{K} \mathbb{I}(y^{(i)}=k)(\mathbf{w}_k^T \mathbf{x}^{(i)} + b_k)\right]$$
 
 The log-sum-exp function $\log \sum_k \exp(z_k)$ is convex, and the second term is linear, hence their sum is convex.
 

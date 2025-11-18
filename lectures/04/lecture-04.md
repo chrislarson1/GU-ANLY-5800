@@ -1,6 +1,6 @@
 # Lecture 04: Distributional Semantics and Information Retrieval
 
-*Chris Larson | Georgetown University | ANLY-5800 | Fall '25*
+*Instructor: Chris Larson | Georgetown University | ANLY-5800 | Fall '25*
 
 In previous lectures, we represented documents using the bag-of-words model, treating each word as an independent feature. We now examine methods for assigning meaningful weights to these features and for discovering latent semantic structure in text corpora. These techniques form the foundation of information retrieval systems and provide our first glimpse into distributional semantics—the principle that words occurring in similar contexts tend to have similar meanings.
 
@@ -179,7 +179,7 @@ $$\mathbf{W} \in \mathbb{R}^{M \times N} \longrightarrow \mathbf{U} \in \mathbb{
 
 **Theorem (Distance concentration; Beyer et al., 1999; Aggarwal et al., 2001).**
 
-Let $\{\mathbf{x}_i\}_{i=1}^M$ be i.i.d. samples in $\mathbb{R}^N$ from a distribution with independent coordinates satisfying mild regularity conditions (e.g., finite variance and non-degenerate support). For any $\ell_q$ norm with $q \ge 1$, the relative contrast between nearest and farthest neighbor distances
+Let $\{\mathbf{x}^{(i)}\}_{i=1}^M$ be i.i.d. samples in $\mathbb{R}^N$ from a distribution with independent coordinates satisfying mild regularity conditions (e.g., finite variance and non-degenerate support). For any $\ell_q$ norm with $q \ge 1$, the relative contrast between nearest and farthest neighbor distances
 $$
 \mathrm{RC}_N = \frac{\mathbb{E}[D_{\max}] - \mathbb{E}[D_{\min}]}{\mathbb{E}[D_{\min}]}
 $$

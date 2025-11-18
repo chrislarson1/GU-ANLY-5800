@@ -1,6 +1,6 @@
 # Lecture 02: Decision Boundary Classification
 
-*Chris Larson | Georgetown University | ANLY-5800 | Fall '25*
+*Instructor: Chris Larson | Georgetown University | ANLY-5800 | Fall '25*
 
 Throughtout this course, we'll discover that a very wide range of problems can be framed as ones of *classification*.
 
@@ -10,7 +10,7 @@ Throughtout this course, we'll discover that a very wide range of problems can b
 
   (c) *Should the next word of a particular sentence be *apple*, *shirt*, or *cat*?*
 
-Each of these examples can be modeled as a classification problem, to which we can apply approaches from statistics. Lectures 02 and 03 introduce linear models for text classification, and focus on problem settings similar to examples (a) and (b) above. In this lecture (02) we will develop geometric intuition by focusing on binary classification and models that learn the parameters of the separating hyperplane explicitely. In Lecture 03 we shift focus to statistical models, and show that their learned parameters have the same, albeit less obvious, interpretation. Later on we will tackle the problem setting 
+Each of these examples can be modeled as a classification problem, to which we can apply approaches from statistics. Lectures 02 and 03 introduce linear models for text classification, and focus on problem settings similar to examples (a) and (b) above. In this lecture (02) we will develop geometric intuition by focusing on binary classification and models that learn the parameters of the separating hyperplane explicitely. In Lecture 03 we shift focus to statistical models, and show that their learned parameters have the same, albeit less obvious, interpretation. Later on we will tackle the problem setting
 
 ## The Bag-of-Words Model
 
@@ -20,16 +20,16 @@ Each of these examples can be modeled as a classification problem, to which we c
 
 $$V = \bigcup_{i=1}^{n} \{w : w \text{ is a word in } d_i\}$$
 
-**Definition 1.2 (Bag-of-Words Representation)** Given a vocabulary $V = \{w_1, w_2, \ldots, w_{|V|}\}$ and a document $d$, the bag-of-words representation is the vector $\mathbf{x}_d \in \mathbb{R}^{|V|}$ where:
+**Definition 1.2 (Bag-of-Words Representation)** Given a vocabulary $V = \{w_1, w_2, \ldots, w_{|V|}\}$ and a document $d$, the bag-of-words representation is the vector $\mathbf{x}^{(d)} \in \mathbb{R}^{|V|}$ where:
 
-$$(\mathbf{x}_d)_i = \text{count}(w_i, d)$$
+$$(\mathbf{x}^{(d)})_j = \text{count}(w_j, d)$$
 
-the number of times word $w_i$ appears in document $d$.
+the number of times word $w_j$ appears in document $d$.
 
 **Example 1.1** Consider the text: *"the cat sat on the mat"*
 
 With vocabulary $V = \{\text{cat}, \text{mat}, \text{on}, \text{sat}, \text{the}\}$, the bag-of-words representation is:
-$$\mathbf{x}_d = [1, 1, 1, 1, 2]$$
+$$\mathbf{x}^{(d)} = [1, 1, 1, 1, 2]^T$$
 corresponding to the word counts for each vocabulary word in order.
 
 ### Properties of Text Representations
@@ -41,13 +41,13 @@ corresponding to the word counts for each vocabulary word in order.
 3. **Loss of sequential information**: Word order is discarded, retaining only frequency information
 4. **Fixed feature space**: All documents are represented in the same $|V|$-dimensional space
 
-**Lemma 1.1** For a corpus with $n$ documents and vocabulary size $|V|$, the bag-of-words representation yields a data matrix $\mathbf{X} \in \mathbb{R}^{n \times |V|}$ where row $i$ contains the representation of document $d_i$.
+**Lemma 1.1** For a corpus with $M$ documents and vocabulary size $|V|$, the bag-of-words representation yields a data matrix $\mathbf{X} \in \mathbb{R}^{M \times |V|}$ where row $i$ contains the representation of document $d_i$.
 
 ## Foundations of Linear Classification
 
 Classification represents one of the fundamental problems in statistical learning theory. Given a feature space $\mathcal{X} = \mathbb{R}^{|V|}$ and a label space $\mathcal{Y}$, we seek to learn a mapping $f: \mathcal{X} \to \mathcal{Y}$ from labeled training examples.
 
-**Definition 1.3** The text classification problem: Given a training set $\mathcal{D} = \{(\mathbf{x}_i, y_i)\}_{i=1}^m$ where $\mathbf{x}_i \in \mathbb{R}^{|V|}$ is the bag-of-words representation of document $d_i$ and $y_i \in \mathcal{Y}$ is its class label, learn a function that accurately predicts the class of new documents.
+**Definition 1.3** The text classification problem: Given a training set $\mathcal{D} = \{(\mathbf{x}^{(i)}, y^{(i)})\}_{i=1}^M$ where $\mathbf{x}^{(i)} \in \mathbb{R}^{|V|}$ is the bag-of-words representation of document $d_i$ and $y^{(i)} \in \mathcal{Y}$ is its class label, learn a function that accurately predicts the class of new documents.
 
 ## High-Dimensional Geometry and Linear Separability
 
@@ -66,13 +66,13 @@ The hyperplane partitions $\mathbb{R}^N$ into three disjoint regions:
 
 ### Theorem 2.1 (Cover's Theorem on Linear Separability)
 
-Let $\{\mathbf{x}_1, \ldots, \mathbf{x}_m\}$ be points in general position in $\mathbb{R}^d$. The probability that these points can be linearly separated into any desired binary labeling is:
+Let $\{\mathbf{x}^{(1)}, \ldots, \mathbf{x}^{(M)}\}$ be points in general position in $\mathbb{R}^d$. The probability that these points can be linearly separated into any desired binary labeling is:
 
-$$P(\text{linear separability}) = 2^{-m} \sum_{k=0}^{d} \binom{m}{k}$$
+$$P(\text{linear separability}) = 2^{-M} \sum_{k=0}^{d} \binom{M}{k}$$
 
-**Corollary 2.1** For fixed $m$ and $d \to \infty$, $P(\text{linear separability}) \to 1$.
+**Corollary 2.1** For fixed $M$ and $d \to \infty$, $P(\text{linear separability}) \to 1$.
 
-**Proof Sketch:** The result follows from counting the number of linearly separable boolean functions over $m$ points in $d$-dimensional space. Each hyperplane can implement at most $\sum_{k=0}^{d} \binom{m}{k}$ distinct dichotomies, and there are $2^m$ total possible labelings.
+**Proof Sketch:** The result follows from counting the number of linearly separable boolean functions over $M$ points in $d$-dimensional space. Each hyperplane can implement at most $\sum_{k=0}^{d} \binom{M}{k}$ distinct dichotomies, and there are $2^M$ total possible labelings.
 
 ### Theorem 2.2 (Distance Concentration in High Dimensions)
 
@@ -106,9 +106,9 @@ We now examine algorithmic approaches for learning hyperplane parameters from da
 
 ### Problem Formulation
 
-**Definition 3.1** Let $\mathcal{D} = \{(\mathbf{x}_i, y_i)\}_{i=1}^m$ be a training dataset where $\mathbf{x}_i \in \mathbb{R}^d$ and $y_i \in \{-1, +1\}$. The linear classification problem seeks to find $\mathbf{w} \in \mathbb{R}^d$ such that:
+**Definition 3.1** Let $\mathcal{D} = \{(\mathbf{x}^{(i)}, y^{(i)})\}_{i=1}^M$ be a training dataset where $\mathbf{x}^{(i)} \in \mathbb{R}^d$ and $y^{(i)} \in \{-1, +1\}$. The linear classification problem seeks to find $\mathbf{w} \in \mathbb{R}^d$ such that:
 
-$$\text{sign}(\mathbf{w}^T\mathbf{x}_i) = y_i \quad \forall i \in \{1, \ldots, m\}$$
+$$\text{sign}(\mathbf{w}^T\mathbf{x}^{(i)}) = y^{(i)} \quad \forall i \in \{1, \ldots, M\}$$
 
 **Definition 3.2** A dataset $\mathcal{D}$ is linearly separable if there exists $\mathbf{w} \in \mathbb{R}^d$ satisfying the above condition.
 
@@ -119,18 +119,18 @@ The Perceptron algorithm can be written as follows:
 
 $$
 \begin{aligned}
-&\textbf{Input:} \quad \mathcal{D} = \{(\mathbf{x}_i, y_i)\}_{i=1}^m,\ \eta > 0 \\
+&\textbf{Input:} \quad \mathcal{D} = \{(\mathbf{x}^{(i)}, y^{(i)})\}_{i=1}^M,\ \eta > 0 \\
 &\textbf{Initialize:} \quad \mathbf{w} = 0 \\
 &\textbf{Repeat:} \\
-&\quad \text{For } i = 1 \text{ to } m: \\
-&\qquad \text{If } y_i (\mathbf{w}^T \mathbf{x}_i) \leq 0: \\
-&\qquad\quad \mathbf{w} \leftarrow \mathbf{w} + \eta y_i \mathbf{x}_i \\
+&\quad \text{For } i = 1 \text{ to } M: \\
+&\qquad \text{If } y^{(i)} (\mathbf{w}^T \mathbf{x}^{(i)}) \leq 0: \\
+&\qquad\quad \mathbf{w} \leftarrow \mathbf{w} + \eta y^{(i)} \mathbf{x}^{(i)} \\
 &\quad \text{Until no mistakes made in a full pass through the data} \\
 &\textbf{Output:} \quad \mathbf{w}
 \end{aligned}
 $$
 
-**Theorem 3.1 (Perceptron Convergence)** If the training data is linearly separable with margin $\gamma > 0$, then the Perceptron algorithm converges in at most $\left(\frac{R}{\gamma}\right)^2$ iterations, where $R = \max_i \|\mathbf{x}_i\|_2$.
+**Theorem 3.1 (Perceptron Convergence)** If the training data is linearly separable with margin $\gamma > 0$, then the Perceptron algorithm converges in at most $\left(\frac{R}{\gamma}\right)^2$ iterations, where $R = \max_i \|\mathbf{x}^{(i)}\|_2$.
 
 **Proof Sketch:** The proof establishes two key bounds:
 1. **Progress bound:** Each mistake increases $\mathbf{w}^T\mathbf{w}^*$ by at least $\gamma$
@@ -142,14 +142,14 @@ Combining these bounds via the Cauchy-Schwarz inequality yields the result.
 
 **Lemma 3.1** The Perceptron update rule has the following geometric interpretation:
 
-For a misclassified example $(\mathbf{x}_i, y_i)$ with $y_i(\mathbf{w}^T\mathbf{x}_i) \leq 0$:
+For a misclassified example $(\mathbf{x}^{(i)}, y^{(i)})$ with $y^{(i)}(\mathbf{w}^T\mathbf{x}^{(i)}) \leq 0$:
 
-$$\mathbf{w}^{(t+1)} = \mathbf{w}^{(t)} + y_i\mathbf{x}_i$$
+$$\mathbf{w}^{(t+1)} = \mathbf{w}^{(t)} + y^{(i)}\mathbf{x}^{(i)}$$
 
 This update satisfies:
-$$(\mathbf{w}^{(t+1)})^T\mathbf{x}_i = \mathbf{w}^{(t)T}\mathbf{x}_i + y_i\|\mathbf{x}_i\|_2^2$$
+$$(\mathbf{w}^{(t+1)})^T\mathbf{x}^{(i)} = \mathbf{w}^{(t)T}\mathbf{x}^{(i)} + y^{(i)}\|\mathbf{x}^{(i)}\|_2^2$$
 
-The term $y_i\|\mathbf{x}_i\|_2^2$ represents a correction in the direction needed to properly classify $\mathbf{x}_i$.
+The term $y^{(i)}\|\mathbf{x}^{(i)}\|_2^2$ represents a correction in the direction needed to properly classify $\mathbf{x}^{(i)}$.
 
 ### Limitations of the Perceptron
 
@@ -180,7 +180,7 @@ $$\text{margin}(\mathbf{x}) = \frac{|\mathbf{w}^T\mathbf{x} + b|}{\|\mathbf{w}\|
 
 **Definition 4.2** For a linearly separable dataset, the maximum margin hyperplane is the solution to:
 
-$$\max_{\mathbf{w},b} \left\{ \min_{i=1,\ldots,m} \frac{y_i(\mathbf{w}^T\mathbf{x}_i + b)}{\|\mathbf{w}\|_2} \right\}$$
+$$\max_{\mathbf{w},b} \left\{ \min_{i=1,\ldots,M} \frac{y^{(i)}(\mathbf{w}^T\mathbf{x}^{(i)} + b)}{\|\mathbf{w}\|_2} \right\}$$
 
 This formulation seeks the hyperplane that maximizes the distance to the closest training examples.
 
@@ -189,16 +189,16 @@ This formulation seeks the hyperplane that maximizes the distance to the closest
 **Observation:** The above objective is invariant to positive scaling of $(\mathbf{w}, b)$, which means that there are infinite solutions to 4.2.
 
 **Solution:** We impose the normalization constraint:
-$$\min_{i=1,\ldots,m} y_i(\mathbf{w}^T\mathbf{x}_i + b) = 1$$
+$$\min_{i=1,\ldots,M} y^{(i)}(\mathbf{w}^T\mathbf{x}^{(i)} + b) = 1$$
 
 This transforms the problem to:
-$$\max_{\mathbf{w},b} \frac{1}{\|\mathbf{w}\|_2} \quad \text{s.t.} \quad y_i(\mathbf{w}^T\mathbf{x}_i + b) \geq 1 \quad \forall i \in \{1 \dots M\}$$
+$$\max_{\mathbf{w},b} \frac{1}{\|\mathbf{w}\|_2} \quad \text{s.t.} \quad y^{(i)}(\mathbf{w}^T\mathbf{x}^{(i)} + b) \geq 1 \quad \forall i \in \{1 \dots M\}$$
 
 ### Hard-Margin SVM Formulation
 
 **Theorem 4.1** The hard-margin SVM optimization problem is:
 
-$$\min_{\mathbf{w},b} \frac{1}{2}\|\mathbf{w}\|_2^2 \quad \text{s.t.} \quad y_i(\mathbf{w}^T\mathbf{x}_i + b) \geq 1 \quad \forall i$$
+$$\min_{\mathbf{w},b} \frac{1}{2}\|\mathbf{w}\|_2^2 \quad \text{s.t.} \quad y^{(i)}(\mathbf{w}^T\mathbf{x}^{(i)} + b) \geq 1 \quad \forall i$$
 
 This is a convex quadratic program with linear constraints, admitting efficient solution algorithms.
 
@@ -208,23 +208,23 @@ The hard-margin formulation requires linear separability, which is rarely satisf
 
 ### Slack Variable Formulation
 
-**Definition 4.3** The soft-margin SVM introduces slack variables $\xi_i \geq 0$ to relax the margin constraints:
+**Definition 4.3** The soft-margin SVM introduces slack variables $\xi^{(i)} \geq 0$ to relax the margin constraints:
 
-$$\min_{\mathbf{w},b,\boldsymbol{\xi}} \frac{1}{2}\|\mathbf{w}\|_2^2 + C\sum_{i=1}^{m} \xi_i$$
+$$\min_{\mathbf{w},b,\boldsymbol{\xi}} \frac{1}{2}\|\mathbf{w}\|_2^2 + C\sum_{i=1}^{M} \xi^{(i)}$$
 
 subject to:
-$$y_i(\mathbf{w}^T\mathbf{x}_i + b) \geq 1 - \xi_i \quad \forall i$$
-$$\xi_i \geq 0 \quad \forall i$$
+$$y^{(i)}(\mathbf{w}^T\mathbf{x}^{(i)} + b) \geq 1 - \xi^{(i)} \quad \forall i$$
+$$\xi^{(i)} \geq 0 \quad \forall i$$
 
 ### Interpretation of Slack Variables
 
 **Lemma 4.1** The optimal slack variables satisfy:
-$$\xi_i = \max(0, 1 - y_i(\mathbf{w}^T\mathbf{x}_i + b))$$
+$$\xi^{(i)} = \max(0, 1 - y^{(i)}(\mathbf{w}^T\mathbf{x}^{(i)} + b))$$
 
 This gives three cases:
-- $\xi_i = 0$: Point satisfies margin constraint with equality or better
-- $0 < \xi_i < 1$: Point is correctly classified but within the margin
-- $\xi_i \geq 1$: Point is misclassified
+- $\xi^{(i)} = 0$: Point satisfies margin constraint with equality or better
+- $0 < \xi^{(i)} < 1$: Point is correctly classified but within the margin
+- $\xi^{(i)} \geq 1$: Point is misclassified
 
 ### Regularization Parameter
 
@@ -233,6 +233,6 @@ This gives three cases:
 - **Small $C$**: Emphasizes large margin (high bias, low variance)
 
 **Theorem 4.2** The soft-margin SVM objective can be written as:
-$$\min_{\mathbf{w},b} \frac{1}{2}\|\mathbf{w}\|_2^2 + C\sum_{i=1}^{m} \max(0, 1 - y_i(\mathbf{w}^T\mathbf{x}_i + b))$$
+$$\min_{\mathbf{w},b} \frac{1}{2}\|\mathbf{w}\|_2^2 + C\sum_{i=1}^{M} \max(0, 1 - y^{(i)}(\mathbf{w}^T\mathbf{x}^{(i)} + b))$$
 
-The term $\max(0, 1 - y_i(\mathbf{w}^T\mathbf{x}_i + b))$ is known as the **hinge loss**.
+The term $\max(0, 1 - y^{(i)}(\mathbf{w}^T\mathbf{x}^{(i)} + b))$ is known as the **hinge loss**.

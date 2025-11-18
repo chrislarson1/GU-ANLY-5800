@@ -1,6 +1,6 @@
 # Lecture 07: Sequence Models and Attention Mechanisms
 
-*Chris Larson | Georgetown University | ANLY-5800 | Fall '25*
+*Instructor: Chris Larson | Georgetown University | ANLY-5800 | Fall '25*
 
 ---
 
@@ -63,24 +63,24 @@ Many NLP tasks involve mapping one sequence to another:
 The encoder is typically an RNN (LSTM or GRU) that processes the input sequence:
 
 $$
-\mathbf{h}_t^{\text{enc}} = f_{\text{enc}}(\mathbf{h}_{t-1}^{\text{enc}}, \mathbf{x}_t)
+\mathbf{h}^{t,\text{enc}} = f_{\text{enc}}(\mathbf{h}^{t-1,\text{enc}}, \mathbf{x}^t)
 $$
 
 **Context Vector:** After processing all inputs, the final hidden state becomes the context:
 $$
-\mathbf{c} = \mathbf{h}_T^{\text{enc}}
+\mathbf{c} = \mathbf{h}^{T,\text{enc}}
 $$
 
 **Bidirectional Encoder:** To capture both past and future context:
 $$
-\mathbf{h}_t^{\text{enc}} = [\overrightarrow{\mathbf{h}}_t; \overleftarrow{\mathbf{h}}_t]
+\mathbf{h}^{t,\text{enc}} = [\overrightarrow{\mathbf{h}}^t; \overleftarrow{\mathbf{h}}^t]
 $$
 
-where $\overrightarrow{\mathbf{h}}_t$ processes forward and $\overleftarrow{\mathbf{h}}_t$ processes backward.
+where $\overrightarrow{\mathbf{h}}^t$ processes forward and $\overleftarrow{\mathbf{h}}^t$ processes backward.
 
 **Final Context:**
 $$
-\mathbf{c} = [\overrightarrow{\mathbf{h}}_T; \overleftarrow{\mathbf{h}}_1]
+\mathbf{c} = [\overrightarrow{\mathbf{h}}^T; \overleftarrow{\mathbf{h}}^1]
 $$
 
 ---
@@ -90,19 +90,19 @@ $$
 The decoder generates output tokens autoregressively:
 
 $$
-\mathbf{h}_t^{\text{dec}} = f_{\text{dec}}(\mathbf{h}_{t-1}^{\text{dec}}, y_{t-1}, \mathbf{c})
+\mathbf{h}^{t,\text{dec}} = f_{\text{dec}}(\mathbf{h}^{t-1,\text{dec}}, y^{t-1}, \mathbf{c})
 $$
 
 $$
-P(y_t | y_{<t}, \mathbf{x}) = \text{softmax}(\mathbf{W}\mathbf{h}_t^{\text{dec}} + \mathbf{b})
+P(y^t | y^{<t}, \mathbf{x}) = \text{softmax}(\mathbf{W}\mathbf{h}^{t,\text{dec}} + \mathbf{b})
 $$
 
 **Initialization:** The decoder's initial hidden state is set from the context:
 $$
-\mathbf{h}_0^{\text{dec}} = \tanh(\mathbf{W}_c \mathbf{c})
+\mathbf{h}^{0,\text{dec}} = \tanh(\mathbf{W}_c \mathbf{c})
 $$
 
-**Training:** Use teacher forcing—feed ground truth $y_{t-1}$ as input at step $t$
+**Training:** Use teacher forcing—feed ground truth $y^{t-1}$ as input at step $t$
 
 **Inference:** Use model's own predictions autoregressively
 
@@ -136,12 +136,12 @@ For a deterministic encoder mapping to fixed-size $\mathbf{c} \in \mathbb{R}^d$,
 **Attention Mechanism:** At each decoding step $t$, compute a weighted combination of all encoder states:
 
 $$
-\mathbf{c}_t = \sum_{i=1}^{T} \alpha_{t,i} \mathbf{h}_i^{\text{enc}}
+\mathbf{c}^t = \sum_{i=1}^{T} \alpha_{t,i} \mathbf{h}_i^{\text{enc}}
 $$
 
-where $\alpha_{t,i}$ is the attention weight indicating how much to focus on input position $i$ when generating output $y_t$.
+where $\alpha_{t,i}$ is the attention weight indicating how much to focus on input position $i$ when generating output $y^t$.
 
-**Dynamic Context:** Each decoder step gets its own context vector $\mathbf{c}_t$, tailored to what's currently needed.
+**Dynamic Context:** Each decoder step gets its own context vector $\mathbf{c}^t$, tailored to what's currently needed.
 
 ---
 
@@ -153,10 +153,10 @@ Introduced by Bahdanau, Cho, and Bengio (2015), this was the first successful at
 
 **Step 1: Alignment Scores**
 
-For each encoder position $i$, compute how well it aligns with decoder state $\mathbf{h}_t^{\text{dec}}$:
+For each encoder position $i$, compute how well it aligns with decoder state $\mathbf{h}^{t,\text{dec}}$:
 
 $$
-e_{t,i} = a(\mathbf{h}_{t-1}^{\text{dec}}, \mathbf{h}_i^{\text{enc}})
+e_{t,i} = a(\mathbf{h}^{t-1,\text{dec}}, \mathbf{h}_i^{\text{enc}})
 $$
 
 where $a(\cdot, \cdot)$ is an alignment model (small neural network).
@@ -165,17 +165,17 @@ where $a(\cdot, \cdot)$ is an alignment model (small neural network).
 
 1. **Additive (Bahdanau):**
 $$
-e_{t,i} = \mathbf{v}^T \tanh(\mathbf{W}_1 \mathbf{h}_{t-1}^{\text{dec}} + \mathbf{W}_2 \mathbf{h}_i^{\text{enc}})
+e_{t,i} = \mathbf{v}^T \tanh(\mathbf{W}_1 \mathbf{h}^{t-1,\text{dec}} + \mathbf{W}_2 \mathbf{h}_i^{\text{enc}})
 $$
 
 2. **Multiplicative (Luong):**
 $$
-e_{t,i} = \mathbf{h}_{t-1}^{\text{dec}T} \mathbf{W} \mathbf{h}_i^{\text{enc}}
+e_{t,i} = \mathbf{h}^{t-1,\text{dec}T} \mathbf{W} \mathbf{h}_i^{\text{enc}}
 $$
 
 3. **Dot Product:**
 $$
-e_{t,i} = \mathbf{h}_{t-1}^{\text{dec}T} \mathbf{h}_i^{\text{enc}}
+e_{t,i} = \mathbf{h}^{t-1,\text{dec}T} \mathbf{h}_i^{\text{enc}}
 $$
 
 ---
@@ -198,14 +198,14 @@ $$
 
 Compute context vector as weighted average of encoder states:
 $$
-\mathbf{c}_t = \sum_{i=1}^{T} \alpha_{t,i} \mathbf{h}_i^{\text{enc}}
+\mathbf{c}^t = \sum_{i=1}^{T} \alpha_{t,i} \mathbf{h}_i^{\text{enc}}
 $$
 
 **Step 4: Incorporate Context**
 
 The decoder state is updated using both previous state and context:
 $$
-\mathbf{h}_t^{\text{dec}} = f_{\text{dec}}(\mathbf{h}_{t-1}^{\text{dec}}, y_{t-1}, \mathbf{c}_t)
+\mathbf{h}^{t,\text{dec}} = f_{\text{dec}}(\mathbf{h}^{t-1,\text{dec}}, y^{t-1}, \mathbf{c}^t)
 $$
 
 ---
@@ -215,7 +215,7 @@ $$
 Attention weights $\alpha_{t,i}$ form a matrix $\mathbf{A} \in \mathbb{R}^{T' \times T}$ where:
 - Rows correspond to decoder (output) positions
 - Columns correspond to encoder (input) positions
-- Entry $(t, i)$ shows how much output $y_t$ attends to input $x_i$
+- Entry $(t, i)$ shows how much output $y^t$ attends to input $x_i$
 
 **Interpretation:**
 - Diagonal patterns: monotonic alignment (e.g., translation)
@@ -443,7 +443,7 @@ Produces:
 
 **Complete System:**
 $$
-\mathbf{h}_t, \mathbf{y}_t, \{\text{memory ops}\} = \text{Controller}(\mathbf{x}_t, \mathbf{r}_{t-1}, \mathbf{h}_{t-1})
+\mathbf{h}^t, \mathbf{y}^t, \{\text{memory ops}\} = \text{Controller}(\mathbf{x}^t, \mathbf{r}^{t-1}, \mathbf{h}^{t-1})
 $$
 
 **End-to-End Training:** All parameters learned jointly via backpropagation through time.
@@ -495,11 +495,11 @@ $$
 
 **Decoder:** At step $t$, produce attention over input positions:
 $$
-u_t^i = \mathbf{v}^T \tanh(\mathbf{W}_1 \mathbf{h}_i^{\text{enc}} + \mathbf{W}_2 \mathbf{h}_t^{\text{dec}})
+u_t^i = \mathbf{v}^T \tanh(\mathbf{W}_1 \mathbf{h}_i^{\text{enc}} + \mathbf{W}_2 \mathbf{h}^{t,\text{dec}})
 $$
 
 $$
-p(y_t = i | y_1, \ldots, y_{t-1}, \mathbf{x}) = \text{softmax}(u_t)_i
+p(y^t = i | y^1, \ldots, y^{t-1}, \mathbf{x}) = \text{softmax}(u_t)_i
 $$
 
 **Key Difference from Standard Attention:** The output IS the attention distribution (pointer), not a weighted combination.
@@ -508,15 +508,15 @@ $$
 
 ## Training Pointer Networks
 
-**Supervised Learning:** Given input-output pairs $(\mathbf{x}, \mathbf{y}^*)$ where $\mathbf{y}^* = (y_1^*, \ldots, y_m^*)$ is a sequence of input indices:
+**Supervised Learning:** Given input-output pairs $(\mathbf{x}, \mathbf{y}^*)$ where $\mathbf{y}^* = (y^{1*}, \ldots, y^{m*})$ is a sequence of input indices:
 
 $$
-\mathcal{L}(\theta) = -\sum_{t=1}^{m} \log p(y_t^* | y_1^*, \ldots, y_{t-1}^*, \mathbf{x}; \theta)
+\mathcal{L}(\theta) = -\sum_{t=1}^{m} \log p(y^{t*} | y^{1*}, \ldots, y^{t-1*}, \mathbf{x}; \theta)
 $$
 
 **Inference:** Use beam search or greedy decoding:
 $$
-\hat{y}_t = \arg\max_i p(y_t = i | \hat{y}_1, \ldots, \hat{y}_{t-1}, \mathbf{x})
+\hat{y}^t = \arg\max_i p(y^t = i | \hat{y}^1, \ldots, \hat{y}^{t-1}, \mathbf{x})
 $$
 
 ---
@@ -571,7 +571,7 @@ Bottleneck: All information through fixed $\mathbf{c}$
 
 ### Attention-Based Seq2Seq
 $$
-\mathbf{x} \xrightarrow{\text{Encoder}} \{\mathbf{h}_1, \ldots, \mathbf{h}_T\} \xrightarrow{\text{Attention}} \mathbf{c}_t \text{ (dynamic)} \xrightarrow{\text{Decoder}} \mathbf{y}
+\mathbf{x} \xrightarrow{\text{Encoder}} \{\mathbf{h}_1, \ldots, \mathbf{h}_T\} \xrightarrow{\text{Attention}} \mathbf{c}^t \text{ (dynamic)} \xrightarrow{\text{Decoder}} \mathbf{y}
 $$
 
 No bottleneck: Decoder accesses all encoder states

@@ -1,6 +1,6 @@
 # Lecture 6: Language Modeling Part I
 
-*Chris Larson | Georgetown University | ANLY-5800 | Fall '25*
+*Instructor: Chris Larson | Georgetown University | ANLY-5800 | Fall '25*
 
 ## Introduction: The Central Task of NLP
 
