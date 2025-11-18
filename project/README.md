@@ -52,15 +52,13 @@ This timeline is relative (Week 1, 2, 3). Exact calendar dates will be specified
     - Baseline idea (simplest thing that could work)
 
 - Checkpoint 2 (end of Week 1): Baseline & plan
-  - Use `project/week1-baseline-checklist.md`.
-  - Must have:
-    - Data preprocessing scripts in the repo
-    - A running baseline
-    - Initial baseline metrics
-    - A short progress note (1–2 pages in the repo) describing:
-      - What you built
-      - Baseline performance
-      - Two concrete improvements you plan to implement in Weeks 2–3
+  - Data preprocessing scripts in the repo
+  - A running baseline
+  - Initial baseline metrics
+  - A short progress note (1–2 pages in the repo) describing:
+    - What you built
+    - Baseline performance
+    - Two concrete improvements you plan to implement in Weeks 2–3
 
 ### Week 2 – Core system and main experiments
 
