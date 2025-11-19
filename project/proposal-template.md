@@ -14,7 +14,7 @@ Use this as a guide for your **2-page max** project proposal (one per group). Yo
 
 ## 2. Problem statement & motivation
 
-- **Task**: What are you trying to do? (e.g., sentiment classification, QA, code generation, tool-using agent, scaling analysis)
+- **Task**: What are you trying to do? (e.g., sentiment classification, QA, code generation, tool-using agent)
 - **Why it matters**: Briefly explain why this problem is interesting or important (scientifically or practically).
 - **Desired outcome**: What will success look like in 3 weeks?
 
