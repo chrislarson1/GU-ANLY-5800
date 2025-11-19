@@ -45,10 +45,10 @@ Assistant: Bonjour
 
 ### SFT Objective
 
-**Definition 1.2 (SFT loss).** Let $\pi_\theta(y\mid x)$ be a pretrained causal LM. The SFT objective is standard supervised learning:
+**Definition 1.2 (SFT loss).** Let $\\pi_\theta(y\mid x)$ be a pretrained causal LM. The SFT objective is standard supervised learning:
 
 $$
-\mathcal{L}_{\text{SFT}}(\theta) = -\mathbb{E}_{(x,y^{*})\sim \mathcal{D}}\bigg[\sum_{t=1}^{|y^{*}|} \log \pi_\theta\big(y^{*}_t\mid x, y^{*}_{<t}\big)\bigg]
+\mathcal{L}_{\text{SFT}}(\theta) = -\mathbb{E}_{(x,y^{*})\sim \mathcal{D}}\bigg[\sum_{t=1}^{|y^{*}|} \log \\pi_\theta\big(y^{*}_t\mid x, y^{*}_{<t}\big)\bigg]
 $$
 
 This is identical to the pretraining objective (Lecture 08), but now:
@@ -87,7 +87,7 @@ SFT treats all as equally valid if they appear in training data. We need to capt
 
 ### Pairwise Preference Data
 
-**Definition 2.1 (Preference annotation).** For prompt $x$, sample two responses $y_1, y_2 \sim \pi_{\text{SFT}}(\cdot \mid x)$ from the SFT model. Human annotators choose which is better, yielding preference pair $(x, y^+, y^-)$ where $y^+ \succ y^-$ means "$y^+$ is preferred to $y^-$."
+**Definition 2.1 (Preference annotation).** For prompt $x$, sample two responses $y_1, y_2 \sim \\pi_{\text{SFT}}(\cdot \mid x)$ from the SFT model. Human annotators choose which is better, yielding preference pair $(x, y^+, y^-)$ where $y^+ \succ y^-$ means "$y^+$ is preferred to $y^-$."
 
 **Annotation criteria (InstructGPT):**
 - Helpfulness: Does it follow the instruction?
@@ -128,12 +128,12 @@ $$
 
 ## RL with KL Control (RLHF)
 
-We learn a policy $\pi_\theta$ that maximizes reward while staying close to a reference policy $\pi_{\text{ref}}$ (e.g., the SFT model) to preserve helpful behaviors.
+We learn a policy $\\pi_\theta$ that maximizes reward while staying close to a reference policy $\\pi_{\text{ref}}$ (e.g., the SFT model) to preserve helpful behaviors.
 
 **Objective.**
 
 $$
-\max_{\theta} \, \mathbb{E}_{x\sim \mathcal{D},\, y\sim \pi_\theta(\cdot\mid x)}\big[ r_\phi(y\mid x) \big] - \beta\, \mathbb{E}_{x\sim \mathcal{D}}\Big[\mathrm{KL}\big(\pi_\theta(\cdot\mid x)\,\Vert\,\pi_{\text{ref}}(\cdot\mid x)\big)\Big]
+\max_{\theta} \, \mathbb{E}_{x\sim \mathcal{D},\, y\sim \\pi_\theta(\cdot\mid x)}\big[ r_\phi(y\mid x) \big] - \beta\, \mathbb{E}_{x\sim \mathcal{D}}\Big[\mathrm{KL}\big(\\pi_\theta(\cdot\mid x)\,\Vert\,\\pi_{\text{ref}}(\cdot\mid x)\big)\Big]
 $$
 
 The KL term regularizes exploration and anchors style/format; $\beta$ controls the alignment–capability trade-off.
@@ -141,16 +141,16 @@ The KL term regularizes exploration and anchors style/format; $\beta$ controls t
 **Policy gradient (sequence-as-action).** With log-derivative trick,
 
 $$
-\nabla_\theta J(\theta) = \mathbb{E}_{x, y\sim \pi_\theta}\Big[\nabla_\theta \log \pi_\theta(y\mid x)\, (r_\phi(y\mid x) - \beta\, \Delta_{\text{KL}}(y, x) - b(x))\Big],
+\nabla_\theta J(\theta) = \mathbb{E}_{x, y\sim \\pi_\theta}\Big[\nabla_\theta \log \\pi_\theta(y\mid x)\, (r_\phi(y\mid x) - \beta\, \Delta_{\text{KL}}(y, x) - b(x))\Big],
 $$
 
 where $\Delta_{\text{KL}}$ denotes per-sample KL term (or advantage-style shaping) and $b(x)$ is a baseline.
 
-**PPO surrogate (token-level).** Let $r_t(\theta) = \frac{\pi_\theta(y_t\mid s_t)}{\pi_{\text{old}}(y_t\mid s_t)}$ and $A_t$ an advantage estimator; the clipped objective is
+**PPO surrogate (token-level).** Let $r_t(\theta) = \frac{\\pi_\theta(y_t\mid s_t)}{\\pi_{\text{old}}(y_t\mid s_t)}$ and $A_t$ an advantage estimator; the clipped objective is
 
 $$
 \mathcal{L}_{\text{PPO}} = -\mathbb{E}\Big[ \min\big( r_t(\theta) A_t, \, \mathrm{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon) A_t \big) \Big]
-\; + \; \beta\, \mathrm{KL}\big(\pi_\theta\Vert\pi_{\text{ref}}\big) \; + \; \lambda \|\theta\|^2.
+\; + \; \beta\, \mathrm{KL}\big(\\pi_\theta\Vert\\pi_{\text{ref}}\big) \; + \; \lambda \|\theta\|^2.
 $$
 
 ---
@@ -159,10 +159,10 @@ $$
 
 DPO avoids explicit reward learning and RL by directly fitting the policy to pairwise preferences relative to a reference policy.
 
-**Derivation (sketch).** Under a KL-regularized objective with an optimal reward model consistent with Bradley–Terry and with $r(y\mid x) \propto \log \frac{\pi_\theta(y\mid x)}{\pi_{\text{ref}}(y\mid x)}$, maximizing preference likelihood yields the logistic loss
+**Derivation (sketch).** Under a KL-regularized objective with an optimal reward model consistent with Bradley–Terry and with $r(y\mid x) \propto \log \frac{\\pi_\theta(y\mid x)}{\\pi_{\text{ref}}(y\mid x)}$, maximizing preference likelihood yields the logistic loss
 
 $$
-\mathcal{L}_{\text{DPO}}(\theta) = -\mathbb{E}_{(x,y^+,y^-)}\Big[ \log \sigma\big( \beta\,[\underbrace{\log \pi_\theta(y^+\mid x) - \log \pi_\theta(y^-\mid x)}_{\text{policy logit gap}} - \underbrace{\log \pi_{\text{ref}}(y^+\mid x) - \log \pi_{\text{ref}}(y^-\mid x)}_{\text{reference gap}}] \big) \Big].
+\mathcal{L}_{\text{DPO}}(\theta) = -\mathbb{E}_{(x,y^+,y^-)}\Big[ \log \sigma\big( \beta\,[\underbrace{\log \\pi_\theta(y^+\mid x) - \log \\pi_\theta(y^-\mid x)}_{\text{policy logit gap}} - \underbrace{\log \\pi_{\text{ref}}(y^+\mid x) - \log \\pi_{\text{ref}}(y^-\mid x)}_{\text{reference gap}}] \big) \Big].
 $$
 
 **Observation.** DPO is stable, simple (no rollouts), and competitive with RLHF given high-quality preference data; $\beta$ tunes adherence to preferences versus the reference style.
@@ -207,7 +207,7 @@ Large LMs exhibit qualitative shifts in behavior as scale grows.
 1. Pretrain or start from a strong base decoder (causal LM) sized to token budget.
 2. SFT on instruction-formatted high-quality data; mix in rejection-sampled or curated examples.
 3. Collect preferences with diverse annotators; train BT reward or apply DPO directly.
-4. If using RLHF: stabilize with KL control to $\pi_{\text{ref}}$, small PPO steps, and reward normalization.
+4. If using RLHF: stabilize with KL control to $\\pi_{\text{ref}}$, small PPO steps, and reward normalization.
 5. Evaluate with capability and safety benchmarks; iterate on data quality (it dominates).
 
 ---
@@ -225,42 +225,42 @@ This appendix reviews core reinforcement learning (RL) concepts that underlie RL
 - $r(s,a)$: reward
 - $\gamma \in [0,1)$: discount factor
 
-An agent following policy $\pi_\theta(a\mid s)$ induces trajectories $\tau = (s_0,a_0,s_1,a_1,\ldots)$ with return
+An agent following policy $\\pi_\theta(a\mid s)$ induces trajectories $\tau = (s_0,a_0,s_1,a_1,\ldots)$ with return
 
 $$
 G_0 = \sum_{t=0}^{\infty} \gamma^t r(s_t,a_t).
 $$
 
-**Objective.** Find $\pi_\theta$ that maximizes expected return
+**Objective.** Find $\\pi_\theta$ that maximizes expected return
 $$
-J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta}\big[G_0\big].
+J(\theta) = \mathbb{E}_{\tau \sim \\pi_\theta}\big[G_0\big].
 $$
 
 In RLHF, we treat the prompt as state, the token sequence as action, and the reward model score as (proxy) return.
 
 ### A.2 Value functions and Q-learning
 
-**Definition A.2 (Value functions).** For fixed policy $\pi$,
+**Definition A.2 (Value functions).** For fixed policy $\\pi$,
 
 $$
-V^{\pi}(s) = \mathbb{E}_{\pi}\big[ G_t \mid s_t = s\big], \qquad
-Q^{\pi}(s,a) = \mathbb{E}_{\pi}\big[ G_t \mid s_t = s, a_t = a\big].
+V^{\\pi}(s) = \mathbb{E}_{\\pi}\big[ G_t \mid s_t = s\big], \qquad
+Q^{\\pi}(s,a) = \mathbb{E}_{\\pi}\big[ G_t \mid s_t = s, a_t = a\big].
 $$
 
 These satisfy the Bellman equations:
 
 $$
-V^{\pi}(s) = \sum_a \pi(a\mid s)\Big[r(s,a) + \gamma \sum_{s'} P(s'\mid s,a)V^{\pi}(s')\Big],
+V^{\\pi}(s) = \sum_a \\pi(a\mid s)\Big[r(s,a) + \gamma \sum_{s'} P(s'\mid s,a)V^{\\pi}(s')\Big],
 $$
 
 $$
-Q^{\pi}(s,a) = r(s,a) + \gamma \sum_{s'} P(s'\mid s,a)\sum_{a'} \pi(a'\mid s')Q^{\pi}(s',a').
+Q^{\\pi}(s,a) = r(s,a) + \gamma \sum_{s'} P(s'\mid s,a)\sum_{a'} \\pi(a'\mid s')Q^{\\pi}(s',a').
 $$
 
 **Optimal value functions.** Define
 
 $$
-Q^{*}(s,a) = \max_\pi Q^\pi(s,a), \qquad V^{*}(s) = \max_a Q^{*}(s,a).
+Q^{*}(s,a) = \max_\\pi Q^\\pi(s,a), \qquad V^{*}(s) = \max_a Q^{*}(s,a).
 $$
 
 Then
@@ -282,15 +282,15 @@ For language modeling, direct tabular Q-learning is intractable due to huge stat
 
 ### A.3 Score-function (REINFORCE) policy gradients
 
-Policy gradient methods directly optimize $J(\theta)$ over parametrized policies $\pi_\theta$.
+Policy gradient methods directly optimize $J(\theta)$ over parametrized policies $\\pi_\theta$.
 
-**Theorem A.3 (Score-function gradient estimator).** For any differentiable policy $\pi_\theta(a\mid s)$,
+**Theorem A.3 (Score-function gradient estimator).** For any differentiable policy $\\pi_\theta(a\mid s)$,
 
 $$
 \nabla_\theta J(\theta)
- = \mathbb{E}_{\tau \sim \pi_\theta}\Bigg[
+ = \mathbb{E}_{\tau \sim \\pi_\theta}\Bigg[
  \sum_{t=0}^{\infty}
- \nabla_\theta \log \pi_\theta(a_t\mid s_t)\, G_t
+ \nabla_\theta \log \\pi_\theta(a_t\mid s_t)\, G_t
  \Bigg].
 $$
 
@@ -299,22 +299,22 @@ This is the **score-function gradient estimator** (SFGE), also known as REINFORC
 **Variance reduction (baselines).** Using any baseline $b(s_t)$ that does not depend on $a_t$,
 
 $$
-\mathbb{E}\big[\nabla_\theta \log \pi_\theta(a_t\mid s_t)\, b(s_t)\big] = 0,
+\mathbb{E}\big[\nabla_\theta \log \\pi_\theta(a_t\mid s_t)\, b(s_t)\big] = 0,
 $$
 
 so we can replace $G_t$ with an advantage term
 
 $$
-A^\pi(s_t,a_t) = Q^\pi(s_t,a_t) - V^\pi(s_t),
+A^\\pi(s_t,a_t) = Q^\\pi(s_t,a_t) - V^\\pi(s_t),
 $$
 
 yielding
 
 $$
-\nabla_\theta J(\theta) = \mathbb{E}\Big[ \nabla_\theta \log \pi_\theta(a_t\mid s_t)\, A^\pi(s_t,a_t) \Big],
+\nabla_\theta J(\theta) = \mathbb{E}\Big[ \nabla_\theta \log \\pi_\theta(a_t\mid s_t)\, A^\\pi(s_t,a_t) \Big],
 $$
 
-which has lower variance. Actor–critic methods approximate $V^\pi$ (critic) and update $\pi_\theta$ (actor).
+which has lower variance. Actor–critic methods approximate $V^\\pi$ (critic) and update $\\pi_\theta$ (actor).
 
 Generalized advantage estimation (GAE) further trades off bias and variance via a smoothing parameter $\lambda \in [0,1]$; GAE-style estimators are standard in modern policy gradient methods (including PPO in RLHF).
 
@@ -341,26 +341,26 @@ MCTS underlies systems such as AlphaZero, where policy and value networks guide 
 
 ### A.5 Trust regions, TRPO, and proximal methods
 
-Vanilla policy gradient updates can be unstable: large steps in parameter space can dramatically change $\pi_\theta$. Trust-region methods constrain each update to keep the new policy close (in KL) to the old one.
+Vanilla policy gradient updates can be unstable: large steps in parameter space can dramatically change $\\pi_\theta$. Trust-region methods constrain each update to keep the new policy close (in KL) to the old one.
 
 **TRPO (Trust Region Policy Optimization).** Optimize a surrogate
 
 $$
-\max_\theta \; \mathbb{E}_{s,a\sim \pi_{\text{old}}}
+\max_\theta \; \mathbb{E}_{s,a\sim \\pi_{\text{old}}}
 \bigg[
- \frac{\pi_\theta(a\mid s)}{\pi_{\text{old}}(a\mid s)} A_{\text{old}}(s,a)
+ \frac{\\pi_\theta(a\mid s)}{\\pi_{\text{old}}(a\mid s)} A_{\text{old}}(s,a)
 \bigg]
 $$
 
 subject to the KL constraint
 
 $$
-\mathbb{E}_{s\sim \pi_{\text{old}}}
-\big[\mathrm{KL}(\pi_{\text{old}}(\cdot\mid s)\,\Vert\,\pi_{\theta}(\cdot\mid s))\big]
+\mathbb{E}_{s\sim \\pi_{\text{old}}}
+\big[\mathrm{KL}(\\pi_{\text{old}}(\cdot\mid s)\,\Vert\,\\pi_{\theta}(\cdot\mid s))\big]
  \le \delta.
 $$
 
-This yields **small, trust-region steps** that improve performance while controlling divergence from $\pi_{\text{old}}$.
+This yields **small, trust-region steps** that improve performance while controlling divergence from $\\pi_{\text{old}}$.
 
 **PPO (Proximal Policy Optimization).** PPO replaces the hard KL constraint with a clipped objective:
 
@@ -371,7 +371,7 @@ L^{\text{CLIP}}(\theta) = \mathbb{E}
  \Big],
 $$
 
-where $r_t(\theta) = \frac{\pi_\theta(a_t\mid s_t)}{\pi_{\text{old}}(a_t\mid s_t)}$ and $\epsilon>0$ is a small constant. An explicit KL penalty to a reference policy is often added.
+where $r_t(\theta) = \frac{\\pi_\theta(a_t\mid s_t)}{\\pi_{\text{old}}(a_t\mid s_t)}$ and $\epsilon>0$ is a small constant. An explicit KL penalty to a reference policy is often added.
 
 PPO is simpler to implement than TRPO, retains the trust-region intuition, and is the de facto standard in modern deep RL—hence its widespread use in RLHF pipelines.
 
@@ -379,7 +379,7 @@ PPO is simpler to implement than TRPO, retains the trust-region intuition, and i
 
 - RLHF uses a **KL-regularized policy objective** together with PPO-style updates:
   - The reward model $r_\phi$ provides per-trajectory or per-token rewards.
-  - The KL term to $\pi_{\text{ref}}$ acts as a trust-region regularizer.
+  - The KL term to $\\pi_{\text{ref}}$ acts as a trust-region regularizer.
   - Advantage estimators (often GAE) and clipping implement a practical proximal update.
 - DPO can be viewed as optimizing a related KL-regularized objective **in closed form** at the level of preference pairs:
   - It avoids explicit rollouts and explicit reward models.
