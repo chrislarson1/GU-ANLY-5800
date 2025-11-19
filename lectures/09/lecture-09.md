@@ -45,7 +45,9 @@ Assistant: Bonjour
 
 ### SFT Objective
 
-**Definition 1.2 (SFT loss).** Let $\pi_\theta(y\mid x)$ be a pretrained causal LM. The SFT objective is standard supervised learning:
+**Definition 1.2 (SFT loss).**
+
+Let $\pi_\theta(y\mid x)$ be a pretrained causal LM. The SFT objective is standard supervised learning:
 
 $$
 \mathcal{L}_{\text{SFT}}(\theta) = -\mathbb{E}_{(x,y^{*})\sim \mathcal{D}}\bigg[\sum_{t=1}^{|y^{*}|} \log \pi_\theta\big(y^{*}_t\mid x, y^{*}_{<t}\big)\bigg]
@@ -240,7 +242,9 @@ In RLHF, we treat the prompt as state, the token sequence as action, and the rew
 
 ### A.2 Value functions and Q-learning
 
-**Definition A.2 (Value functions).** For fixed policy $\pi$,
+**Definition A.2 (Value functions).**
+
+For fixed policy $\pi$,
 
 $$
 V^\pi(s) = \mathbb{E}_\pi\big[ G_t \mid s_t = s\big], \qquad
@@ -257,7 +261,9 @@ $$
 Q^\pi(s,a) = r(s,a) + \gamma \sum_{s'} P(s'\mid s,a)\sum_{a'} \pi(a'\mid s')Q^\pi(s',a').
 $$
 
-**Optimal value functions.** Define
+**Optimal value functions.**
+
+Define
 
 $$
 Q^{*}(s,a) = \max_\pi Q^\pi(s,a), \qquad V^{*}(s) = \max_a Q^{*}(s,a).
@@ -378,11 +384,11 @@ $$
 
 where $r_t(\theta) = \frac{\pi_\theta(a_t\mid s_t)}{\pi_{\text{old}}(a_t\mid s_t)}$ and $\epsilon>0$ is a small constant. An explicit KL penalty to a reference policy is often added.
 
-PPO is simpler to implement than TRPO, retains the trust-region intuition, and is the de facto standard in modern deep RL—hence its widespread use in RLHF pipelines.
+PPO is simpler to implement than TRPO, retains the trust-region intuition, and is the de facto standard in modern deep RL; hence its widespread use in RLHF pipelines.
 
 ### A.6 Connection to RLHF and DPO
 
-- RLHF uses a **KL-regularized policy objective** together with PPO-style updates:
+- RLHF uses a KL-regularized policy objective together with PPO-style updates:
   - The reward model $r_\phi$ provides per-trajectory or per-token rewards.
   - The KL term to $\pi_{\text{ref}}$ acts as a trust-region regularizer.
   - Advantage estimators (often GAE) and clipping implement a practical proximal update.
