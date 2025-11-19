@@ -34,7 +34,7 @@ The first step adapts a pretrained model to follow instructions through supervis
 **Definition 1.1 (Instruction format).** An instruction example consists of:
 - **System prompt** (optional): Role/context (e.g., "You are a helpful assistant")
 - **User prompt** $x$: The instruction or question
-- **Assistant response** $y^*$: The desired completion
+- **Assistant response** $y^{*}$: The desired completion
 
 **Example:**
 ```
@@ -48,7 +48,7 @@ Assistant: Bonjour
 **Definition 1.2 (SFT loss).** Let $\pi_\theta(y\mid x)$ be a pretrained causal LM. The SFT objective is standard supervised learning:
 
 $$
-\mathcal{L}_{\text{SFT}}(\theta) = -\mathbb{E}_{(x,y^*)\sim \mathcal{D}}\bigg[\sum_{t=1}^{|y^*|} \log \pi_\theta\big(y^*_t\mid x, y^*_{<t}\big)\bigg]
+\mathcal{L}_{\text{SFT}}(\theta) = -\mathbb{E}_{(x,y^{*})\sim \mathcal{D}}\bigg[\sum_{t=1}^{|y^{*}|} \log \pi_\theta\big(y^{*}_t\mid x, y^{*}_{<t}\big)\bigg]
 $$
 
 This is identical to the pretraining objective (Lecture 08), but now:
@@ -181,7 +181,7 @@ $$
 
 where $N$ is parameter count, $D$ tokens seen, and $C$ training compute.
 
-**Compute-optimal allocation.** With FLOPs roughly proportional to $\mathrm{FLOPs} \propto N\cdot D$ for dense decoders, minimizing loss at fixed compute yields a rule of thumb $D^* \propto N$. Oversized models undertrained on tokens waste capacity; modestly sized models trained longer often win ("data-limited" vs. "parameter-limited" regimes).
+**Compute-optimal allocation.** With FLOPs roughly proportional to $\mathrm{FLOPs} \propto N\cdot D$ for dense decoders, minimizing loss at fixed compute yields a rule of thumb $D^{*} \propto N$. Oversized models undertrained on tokens waste capacity; modestly sized models trained longer often win ("data-limited" vs. "parameter-limited" regimes).
 
 **Practical implications.**
 - Match dataset size to parameter count (token-budgeting).
@@ -243,8 +243,8 @@ In RLHF, we treat the prompt as state, the token sequence as action, and the rew
 **Definition A.2 (Value functions).** For fixed policy $\pi$,
 
 $$
-V^\pi(s) = \mathbb{E}_\pi\big[ G_t \mid s_t = s\big], \qquad
-Q^\pi(s,a) = \mathbb{E}_\pi\big[ G_t \mid s_t = s, a_t = a\big].
+V^{\pi}(s) = \mathbb{E}_{\pi}\big[ G_t \mid s_t = s\big], \qquad
+Q^{\pi}(s,a) = \mathbb{E}_{\pi}\big[ G_t \mid s_t = s, a_t = a\big].
 $$
 
 These satisfy the Bellman equations:
@@ -311,10 +311,7 @@ $$
 yielding
 
 $$
-\nabla_\theta J(\theta)
- = \mathbb{E}\Big[
- \nabla_\theta \log \pi_\theta(a_t\mid s_t)\, A^\pi(s_t,a_t)
- \Big],
+\nabla_\theta J(\theta) = \mathbb{E}\Big[ \nabla_\theta \log \pi_\theta(a_t\mid s_t)\, A^\pi(s_t,a_t) \Big],
 $$
 
 which has lower variance. Actor–critic methods approximate $V^\pi$ (critic) and update $\pi_\theta$ (actor).
@@ -368,11 +365,9 @@ This yields **small, trust-region steps** that improve performance while control
 **PPO (Proximal Policy Optimization).** PPO replaces the hard KL constraint with a clipped objective:
 
 $$
-L^{\text{CLIP}}(\theta)
- = \mathbb{E}\Big[
- \min\big( r_t(\theta) A_t,\,
-           \mathrm{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon) A_t
- \big)
+L^{\text{CLIP}}(\theta) = \mathbb{E}
+ \Big[
+ \min\big( r_t(\theta) A_t,\, \mathrm{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon) A_t \big)
  \Big],
 $$
 
