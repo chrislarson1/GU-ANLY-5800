@@ -250,11 +250,11 @@ $$
 These satisfy the Bellman equations:
 
 $$
-V^\pi(s) = \sum_a \pi(a\mid s)\Big[r(s,a) + \gamma \sum_{s'} P(s'\mid s,a)V^\pi(s')\Big],
+V^{\pi}(s) = \sum_a \pi(a\mid s)\Big[r(s,a) + \gamma \sum_{s'} P(s'\mid s,a)V^{\pi}(s')\Big],
 $$
 
 $$
-Q^\pi(s,a) = r(s,a) + \gamma \sum_{s'} P(s'\mid s,a)\sum_{a'} \pi(a'\mid s')Q^\pi(s',a').
+Q^{\pi}(s,a) = r(s,a) + \gamma \sum_{s'} P(s'\mid s,a)\sum_{a'} \pi(a'\mid s')Q^{\pi}(s',a').
 $$
 
 **Optimal value functions.** Define
